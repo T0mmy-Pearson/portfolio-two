@@ -503,6 +503,13 @@ body {
   font-style: normal;
   color: #000000
 }
+
+.libertinus-mono-bold {
+  font-family: "Libertinus Mono", monospace;
+  font-weight: 700;
+  font-style: normal;
+  color: #000000
+}
 @font-face {
   font-family: 'Libertinus Mono';
   src: url('/fonts/LibertinusMono-Regular.ttf') format('truetype');

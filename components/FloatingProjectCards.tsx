@@ -2,15 +2,6 @@
 
 import { useEffect, useState, useRef } from 'react'
 
-interface CardPhysics {
-  id: number
-  project: typeof projects[0]
-  x: number
-  y: number
-  vx: number // velocity x
-  vy: number // velocity y
-  animationDelay: number
-}
 
 const projects = [
  {
@@ -93,7 +84,7 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger }: FloatingProjec
       setIsVisible(true)
       const initialCards = projects.map((project, index) => {
         // Use section dimensions instead of full screen
-        const sectionWidth = 1200 // Approximate section width
+        const sectionWidth = 600 // Approximate section width
         const sectionHeight = 800 // Approximate section height
         
         let x, y
@@ -149,7 +140,7 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger }: FloatingProjec
     <>
       <div className="absolute inset-0 pointer-events-none">
         {cards.map((card) => {
-          // Assign Pong ball animation patterns
+
           const pongAnimations = [
             'animate-pong-ball-1', 
             'animate-pong-ball-2', 
@@ -158,6 +149,31 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger }: FloatingProjec
             'animate-pong-ball-5'
           ]
           const pongAnimation = pongAnimations[card.id % pongAnimations.length]
+          
+
+          const splatShapes = [
+            '40% 60% 70% 30% / 60% 30% 70% 40%',
+            '60% 40% 30% 70% / 40% 70% 60% 30%',
+            '30% 70% 60% 40% / 70% 30% 40% 60%',
+            '70% 30% 40% 60% / 30% 60% 70% 40%',
+            '50% 30% 70% 40% / 60% 40% 30% 70%'
+          ]
+          const splatShape = splatShapes[card.id % splatShapes.length]
+          
+          // Random rotation for each splat
+          const rotation = Math.random() * 60 - 30 // Between -30 and 30 degrees
+          
+          // Different paint colors for variety
+          const paintColors = [
+            '#cb4242', // Red
+            '#3b82f6', // Blue  
+            '#eab308', // Yellow
+            '#22c55e', // Green
+            '#a855f7', // Purple
+            '#f97316', // Orange
+            '#ec4899'  // Pink
+          ]
+          const paintColor = paintColors[card.id % paintColors.length]
           
           return (
             <div
@@ -172,21 +188,63 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger }: FloatingProjec
               onClick={() => handleCardClick(card)}
             >
               <div 
-                className={`bg-[#f0edcf]/90  rounded-lg p-3 shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 animate-bounce-float ${pongAnimation} w-48 border border-white/40`}
+                className={`relative  p-3  hover:shadow-2xl transition-all duration-300 hover:scale-105 animate-bounce-float ${pongAnimation} w-48`}
                 style={{
                   animationDelay: `${card.floatDelay}s`,
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.3)'
+                  borderRadius: splatShape,
+                  transform: `rotate(${rotation}deg)`
                 }}
               >
-                <div className="w-full h-24 mb-2 overflow-hidden rounded shadow-inner">
+                {/* Paint splat drops */}
+                <div 
+                  className="absolute w-3 h-3 rounded-full"
+                  style={{
+                    top: '-8px',
+                    left: '20%',
+                    borderRadius: '50% 30%',
+                    backgroundColor: paintColor,
+                    opacity: 0.8
+                  }}
+                ></div>
+                <div 
+                  className="absolute w-2 h-2 rounded-full"
+                  style={{
+                    bottom: '-6px',
+                    right: '15%',
+                    backgroundColor: paintColor,
+                    opacity: 0.7
+                  }}
+                ></div>
+                <div 
+                  className="absolute w-4 h-2"
+                  style={{
+                    top: '30%',
+                    right: '-10px',
+                    borderRadius: '60% 40%',
+                    backgroundColor: paintColor,
+                    opacity: 0.6
+                  }}
+                ></div>
+                <div 
+                  className="absolute w-2 h-3"
+                  style={{
+                    bottom: '20%',
+                    left: '-8px',
+                    borderRadius: '40% 60%',
+                    backgroundColor: paintColor,
+                    opacity: 0.5
+                  }}
+                ></div>
+                <div className="w-full h-24 mb-2 overflow-hidden shadow-inner relative z-10" style={{borderRadius: '30% 70% 60% 40%'}}>
                   <img 
                     src={card.project.imageUrl} 
                     alt={card.project.title}
                     className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                    style={{borderRadius: '30% 70% 60% 40%'}}
                   />
                 </div>
-                <h3 className="text-sm font-bold text-gray-900 mb-1 line-clamp-2 drop-shadow-sm">{card.project.title}</h3>
-                <p className="text-xs text-gray-700 line-clamp-2 drop-shadow-sm">{card.project.description}</p>
+                <h3 className="text-sm font-bold text-gray-900 mb-1 line-clamp-2 drop-shadow-sm relative z-10 libertinus-mono-bold">{card.project.title}</h3>
+                <p className="text-xs text-gray-700 line-clamp-2 drop-shadow-sm relative z-10 libertinus-mono-regular">{card.project.description}</p>
               </div>
             </div>
           )
@@ -196,7 +254,7 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger }: FloatingProjec
       {/* Modal */}
       {isModalOpen && selectedProject && (
         <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-500 p-4"
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-500 p-4"
           onClick={closeModal}
           onKeyDown={handleKeyDown}
           tabIndex={0}
@@ -209,9 +267,9 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger }: FloatingProjec
               {/* Close button */}
               <button
                 onClick={closeModal}
-                className="absolute top-4 right-4 z-10 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all duration-200"
+                className="absolute top-4 right-4 z-10  hover:bg-slate rounded-full p-2 shadow-lg transition-all duration-200"
               >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6" fill="none" stroke="white" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -228,7 +286,7 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger }: FloatingProjec
               {/* Project content */}
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-2xl font-bold text-gray-900">{selectedProject.title}</h2>
+                  <h2 className="text-2xl font-bold text-gray-900 libertinus-mono-bold">{selectedProject.title}</h2>
                   {selectedProject.ghLink && (
                     <button
                       onClick={() => window.open(selectedProject.ghLink, '_blank')}
@@ -244,19 +302,19 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger }: FloatingProjec
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-gray-600 leading-relaxed">{selectedProject.description}</p>
+                    <p className="text-gray-600 leading-relaxed libertinus-mono-regular">{selectedProject.description}</p>
                   </div>
 
                   {selectedProject.description2 && (
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-800 mb-2">Technical Details</h3>
-                      <p className="text-gray-600 leading-relaxed">{selectedProject.description2}</p>
+                      <h3 className="text-lg font-semibold text-gray-800 mb-2 libertinus-mono-regular">Technical Details</h3>
+                      <p className="text-gray-600 leading-relaxed libertinus-mono-regular">{selectedProject.description2}</p>
                     </div>
                   )}
 
                   {selectedProject.videoUrl && (
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-800 mb-2">Demo Video</h3>
+                      <h3 className="text-lg font-semibold text-gray-800 mb-2 libertinus-mono-regular">Demo Video</h3>
                       <video 
                         controls 
                         className="w-full rounded-lg shadow-lg"
@@ -274,7 +332,7 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger }: FloatingProjec
                   {selectedProject.url && (
                     <button
                       onClick={handleVisitProject}
-                      className="flex-1 bg-slate-400 hover:bg-slate-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+                      className="flex-1 bg-slate-400 hover:bg-slate-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 libertinus-mono-regular"
                     >
                       Visit Project
                     </button>

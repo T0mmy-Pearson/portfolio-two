@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Hero from '../components/Hero'
-import Projects from '../components/Projects'
+import AnimatedCard from '../components/AnimatedCard.module.css'
 import Contact from '../components/Contact'
 import About from '../components/About'
 import FloatingProjectCards from '../components/FloatingProjectCards'
@@ -37,14 +37,13 @@ export default function Home() {
   }
 
   return (
-    <div className="relative bg-[#f0edcf] min-h-screen">
+    <div className="relative bg-[#f0edcf]">
       {/* Hero Section - Main content */}
       <Hero 
         onViewProjects={handleViewProjects} 
         onAboutClick={handleShowAbout}
         onContactClick={handleShowContact}
       />
-
       {/* Floating Project Cards Overlay */}
       {showFloatingCards && (
         <div className="fixed inset-0 z-10 overflow-hidden">
@@ -54,9 +53,9 @@ export default function Home() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(203,66,66,0.08),transparent_60%)]"></div>
           
           {/* Floating geometric shapes for depth */}
-          <div className="absolute top-20 left-20 w-32 h-32 bg-[#cb4242]/20 rounded-full blur-xl animate-pulse"></div>
-          <div className="absolute bottom-40 right-32 w-24 h-24 bg-[#cb4242]/15 rounded-lg rotate-45 blur-lg animate-bounce-slow"></div>
-          <div className="absolute top-1/2 left-1/3 w-16 h-16 bg-[#cb4242]/10 rounded-full blur-md animate-float-slow"></div>
+          <div className="absolute top-20 left-20 w-32 h-32 bg-[#cb4242]/20 rounded-full animate-pulse"></div>
+          <div className="absolute bottom-40 right-32 w-24 h-24 bg-[#cb4242]/15 rounded-lg rotate-45 animate-bounce-slow"></div>
+          <div className="absolute top-1/2 left-1/3 w-16 h-16 bg-[#cb4242]/10 rounded-full animate-float-slow"></div>
           
           {/* Hide Projects Button */}
           <button

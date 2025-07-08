@@ -1,0 +1,156 @@
+/*!******************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[7].use[3]!./components/AnimatedCard.module.css ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************/
+
+
+.AnimatedCard_card__iwvPM {
+  background-image: url('/Public/duologue.png'); /* Update path if needed */
+  background-size: cover;
+  background-position: center;
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow);
+  max-width: 35ch;
+  width: 100%;
+  overflow: hidden;
+  transition: transform var(--transition);
+  outline: none;
+}
+
+.AnimatedCard_card__content__50x2c {
+  position: relative;
+  padding: var(--padding);
+  background: linear-gradient(
+    to bottom,
+    hsl(0 0% 0% / 0.9) 0%,
+    hsl(0 0% 0% / 0.95) 10%,
+    hsl(0 0% 0% / 0.8) 100%
+  );
+  border-radius: var(--card-radius);
+  z-index: 1;
+}
+
+.AnimatedCard_card__title__ONVMA {
+  position: relative;
+  width: -moz-max-content;
+  width: max-content;
+  margin: 0 0 1rem 0;
+  font-size: 2rem;
+}
+
+/* Decorative underline using pseudo-element */
+.AnimatedCard_card__title__ONVMA::after {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--padding));
+  right: auto;
+  bottom: -4px;
+  height: 4px;
+  width: calc(100% + var(--padding) * 2);
+  background: var(--accent);
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
+}
+
+.AnimatedCard_card__body___HZ4N {
+  color: rgb(255 255 255 / 0.9);
+  margin: 0 0 1.5rem 0;
+}
+
+.AnimatedCard_button__Of8Rh {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--neutral-900);
+  text-decoration: none;
+  font-weight: bold;
+  padding: 0.5em 1.25em;
+  border-radius: var(--button-radius);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+  outline: none;
+  border: none;
+}
+
+.AnimatedCard_button__Of8Rh:hover,
+.AnimatedCard_button__Of8Rh:focus {
+  background: var(--neutral-100);
+  color: var(--neutral-900);
+}
+
+/* Animations and transitions only on devices that support hover */
+@media (hover: hover) {
+  .AnimatedCard_card__iwvPM {
+    transition: transform var(--transition);
+  }
+  .AnimatedCard_card__iwvPM:hover,
+  .AnimatedCard_card__iwvPM:focus-within {
+    transform: scale(1.025);
+  }
+
+  .AnimatedCard_card__content__50x2c {
+    transform: translateY(2.5rem);
+    opacity: 0.95;
+    transition:
+      transform var(--transition),
+      opacity var(--transition);
+    transition-delay: 0s;
+  }
+
+  .AnimatedCard_card__iwvPM:hover .AnimatedCard_card__content__50x2c,
+  .AnimatedCard_card__iwvPM:focus-within .AnimatedCard_card__content__50x2c {
+    transform: translateY(0);
+    opacity: 1;
+    transition-delay: 0s;
+  }
+
+  .AnimatedCard_card__title__ONVMA::after {
+    transition: transform var(--transition);
+    transition-delay: 0.15s;
+  }
+  .AnimatedCard_card__iwvPM:hover .AnimatedCard_card__title__ONVMA::after,
+  .AnimatedCard_card__iwvPM:focus-within .AnimatedCard_card__title__ONVMA::after {
+    transform: scaleX(1);
+    transition-delay: 0.05s;
+  }
+
+  .AnimatedCard_card__content__50x2c > :not(.AnimatedCard_card__title__ONVMA) {
+    opacity: 0;
+    transition: opacity var(--transition);
+    transition-delay: 0s;
+  }
+  .AnimatedCard_card__iwvPM:hover .AnimatedCard_card__content__50x2c > :not(.AnimatedCard_card__title__ONVMA),
+  .AnimatedCard_card__iwvPM:focus-within .AnimatedCard_card__content__50x2c > :not(.AnimatedCard_card__title__ONVMA) {
+    opacity: 1;
+    transition-delay: 0.3s;
+  }
+}
+
+/* On devices without hover (touch devices), show everything by default, no animation */
+@media (hover: none) {
+  .AnimatedCard_card__iwvPM {
+    transform: none !important;
+  }
+  .AnimatedCard_card__content__50x2c {
+    transform: none !important;
+    opacity: 1 !important;
+    transition: none !important;
+  }
+  .AnimatedCard_card__title__ONVMA::after {
+    transform: scaleX(1) !important;
+    transition: none !important;
+  }
+  .AnimatedCard_card__content__50x2c > :not(.AnimatedCard_card__title__ONVMA) {
+    opacity: 1 !important;
+    transition: none !important;
+  }
+}
+
+
+
+/* Responsive tweaks */
+@media (max-width: 500px) {
+  .AnimatedCard_card__iwvPM {
+    max-width: 95vw;
+  }
+}

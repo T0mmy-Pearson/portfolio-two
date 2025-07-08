@@ -21,9 +21,9 @@ const WriterPortfolio = ({ isVisible, onClose }: WriterPortfolioProps) => {
   const repeatedText = Array(24).fill(loremText).flat()
 
   return (
-    <div className="absolute top-0 right-0 bottom-0 z-30 flex items-center justify-end pr-12 pointer-events-none">
-      <div className="w-96 bg-[#f0edcf] rounded-lg p-6  overflow-hidden relative pointer-events-auto">
-        
+    <div className="fixed top-1/4 right-12 z-30 pointer-events-none">
+      <div className="w-96 h-96 bg-[#f0edcf] rounded-lg p-6 overflow-hidden relative pointer-events-auto">
+
         {/* Scrolling Content */}
         <div className="h-full overflow-hidden">
           <div className="animate-scroll-up libertinus-mono-regular text-gray-700 leading-relaxed space-y-4">
