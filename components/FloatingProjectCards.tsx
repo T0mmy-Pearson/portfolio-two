@@ -7,7 +7,7 @@ const projects = [
  {
       title:"WIP - projectpartnership",
       description: "State site design for an energy cooperative based in Aberdeen. Built in React with pure CSS and Javascript.",
-      imageUrl: "/pp.png",
+      imageUrl: "https://via.placeholder.com/400x300/cb4242/white?text=ProjectPartnership",
       ghLink: "https://github.com/T0mmy-Pearson/projectpartnership-final",
       url: "https://projectpartnership.netlify.app/",
     },
@@ -15,7 +15,7 @@ const projects = [
       title: "CapCheck",
       description: "From the final group project on the Northcoders' bootcamp, CapCheck is a comprehensive mushroom identification app featuring an interactive map with real-time sighting locations, rainfall overlays, and searchable species markers, plus a database of over 250 mushrooms with advanced filtering by edibility and season. The app includes personalized user profiles with photo uploads, discovery tracking, and achievement systems, all built with a mobile-first design supporting both iOS and Android platforms.",
       description2:"CapCheck is built with React Native and Expo for cross-platform mobile development, featuring TypeScript, React Navigation, and React Native Maps with Google Maps integration for interactive mapping functionality. The backend utilizes FastAPI with Python for the API layer, PostgreSQL for data storage, and integrates external services like OpenWeatherMap for weather overlays, all hosted on the Render cloud platform.",
-      imageUrl: "/capcheck.png",
+      imageUrl: "https://via.placeholder.com/400x300/3b82f6/white?text=CapCheck",
       ghLink: "https://github.com/T0mmy-Pearson/capcheck",
       isModal: true,
       videoUrl: "https://0eswuvlc9p7jubst.public.blob.vercel-storage.com/CapCheck-Demo-fUHd6hUvzVbCJAKTX83ClzFKjzk7mK.mp4" 
@@ -23,35 +23,35 @@ const projects = [
      {
       title: "Duologue: poetry slot machine",
       description: "A  poetry fruit machine that produces unique alignments and word patterns from the long poem \Duologue\. Using react and pure CSS to create a simple slot machine experience and random phrase generator, based on one of my poems. All logic in JS and CSS, no backend.",
-      imageUrl: "/duologue.png",
+      imageUrl: "https://via.placeholder.com/400x300/eab308/white?text=Duologue",
       ghLink: "https://github.com/T0mmy-Pearson/poem-duolouge",
       url: "https://duologue-slot-machine.netlify.app/"
     },
     {
       title: "Tic-Tac-Toe",
       description: "A basic two-player Tic-Tac-Toe game built with React and CSS, desktop-only. The game features a simple and intuitive interface, allowing players to take turns marking their spaces on a 3x3 grid. It's built with canvas for rendering and includes basic game logic to determine the winner or a draw.",
-      imageUrl: "/ttt.png",
+      imageUrl: "https://via.placeholder.com/400x300/22c55e/white?text=Tic-Tac-Toe",
       ghLink: "https://github.com/T0mmy-Pearson/tic-tac-toe",
       url: "https://nought.netlify.app/"
     },
     {
       title: "Planet of the Day",
       description: "A React application that displays a new planet every day from NASA's API, showcasing the beauty of our solar system through a modal info page. The app features a clean and responsive design, allowing users to explore, on different days, various planets with detailed information and images, randomly selected from Nasa's API.",
-      imageUrl: "/potd.png",
+      imageUrl: "https://via.placeholder.com/400x300/a855f7/white?text=Planet+of+Day",
       ghLink: "https://github.com/T0mmy-Pearson/nasa-api",
       url: "https://planetoftheday.netlify.app/"
     },
     {
       title: "Nc News App",
       description: "A solo project from the Northcoder's bootcampA full-stack news application built with React and Node.js, featuring user authentication, article creation, and commenting. My first experience with a full-stack application using react, constructing APIs to a database hosted on Render, and deploying a React frontend to Netlify.",
-      imageUrl: "/nc-news.png",
+      imageUrl: "https://via.placeholder.com/400x300/f97316/white?text=NC+News",
       ghLink: "https://github.com/T0mmy-Pearson/nc-news-app",
       url: "https://ncnews-t0mmy-pearson.netlify.app/"
     },
     {
       title: "A Quick To-Do list",
       description: "React application that allows users to create, manage, and track their tasks. Quick and easy to use. A tutorial completed during the Northcoders bootcamp, this app features a simple and intuitive interface for task management, allowing users to add, edit, and delete tasks with ease. It includes basic functionality such as task completion tracking and local storage for persistence.",
-      imageUrl: "/Tdl.png",
+      imageUrl: "https://via.placeholder.com/400x300/ec4899/white?text=To-Do+List",
       ghLink: "https://github.com/T0mmy-Pearson/your-to-do-list",
       url: "https://yourquicktodolist.netlify.app/"
     }
@@ -295,7 +295,7 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger, isMobileSliding 
                         className="flex-shrink-0 bg-transparent hover:bg-gray-100 text-black font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 border border-gray-300"
                       >
                         <img 
-                          src="/icons8-github-64.png" 
+                          src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" 
                           alt="GitHub" 
                           className="w-6 h-6 sm:w-8 sm:h-8"
                         />
@@ -489,7 +489,7 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger, isMobileSliding 
                       className="flex-shrink-0 bg-transparent hover:bg-gray-100 text-black font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 border border-gray-300"
                     >
                       <img 
-                        src="/icons8-github-64.png" 
+                        src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" 
                         alt="GitHub" 
                         className="w-6 h-6 sm:w-8 sm:h-8"
                       />
