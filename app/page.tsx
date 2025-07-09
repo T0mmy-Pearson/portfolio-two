@@ -38,10 +38,7 @@ export default function Home() {
         <Contact onClose={handleCloseContact} />
       )}
 
-      {/* About Modal Overlay */}
-      {showAboutModal && (
-        <About onClose={handleCloseAbout} />
-      )}
+  
     </div>
   )
 }

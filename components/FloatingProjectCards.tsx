@@ -256,16 +256,93 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger, isMobileSliding 
         {/* Modal for mobile */}
         {isModalOpen && selectedProject && (
           <div 
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-500 p-4"
+            className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] p-2 sm:p-4"
             onClick={closeModal}
             onKeyDown={handleKeyDown}
             tabIndex={0}
           >
             <div 
-              className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+              className="bg-white rounded-lg w-full h-full sm:max-w-4xl sm:w-full sm:max-h-[90vh] sm:h-auto overflow-y-auto shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* ...existing modal content... */}
+              <div className="relative">
+                {/* Close button */}
+                <button
+                  onClick={closeModal}
+                  className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all duration-200"
+                >
+                  <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="black" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+
+                {/* Project image */}
+                <div className="w-full h-48 sm:h-64 overflow-hidden rounded-t-lg">
+                  <img 
+                    src={selectedProject.imageUrl} 
+                    alt={selectedProject.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                {/* Project content */}
+                <div className="p-4 sm:p-6">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900 libertinus-mono-bold">{selectedProject.title}</h2>
+                    {selectedProject.ghLink && (
+                      <button
+                        onClick={() => window.open(selectedProject.ghLink, '_blank')}
+                        className="flex-shrink-0 bg-transparent hover:bg-gray-100 text-black font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 border border-gray-300"
+                      >
+                        <img 
+                          src="/icons8-github-64.png" 
+                          alt="GitHub" 
+                          className="w-6 h-6 sm:w-8 sm:h-8"
+                        />
+                        <span className="text-sm sm:text-base">GitHub</span>
+                      </button>
+                    )}
+                  </div>
+                  <div className="space-y-4">
+                    <div>
+                      <p className="text-gray-600 leading-relaxed libertinus-mono-regular text-sm sm:text-base">{selectedProject.description}</p>
+                    </div>
+
+                    {selectedProject.description2 && (
+                      <div>
+                        <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 libertinus-mono-regular">Technical Details</h3>
+                        <p className="text-gray-600 leading-relaxed libertinus-mono-regular text-sm sm:text-base">{selectedProject.description2}</p>
+                      </div>
+                    )}
+
+                    {selectedProject.videoUrl && (
+                      <div>
+                        <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 libertinus-mono-regular">Demo Video</h3>
+                        <video 
+                          controls 
+                          className="w-full rounded-lg shadow-lg"
+                          poster={selectedProject.imageUrl}
+                        >
+                          <source src={selectedProject.videoUrl} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Action buttons */}
+                  <div className="flex gap-3 sm:gap-4 mt-6">
+                    {selectedProject.url && (
+                      <button
+                        onClick={handleVisitProject}
+                        className="flex-1 bg-slate-400 hover:bg-slate-500 text-white font-semibold py-3 px-4 sm:px-6 rounded-lg transition-colors duration-200 libertinus-mono-regular text-sm sm:text-base"
+                      >
+                        Visit Project
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -373,28 +450,28 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger, isMobileSliding 
       {/* Modal */}
       {isModalOpen && selectedProject && (
         <div 
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-500 p-4"
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] p-2 sm:p-4"
           onClick={closeModal}
           onKeyDown={handleKeyDown}
           tabIndex={0}
         >
           <div 
-            className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+            className="bg-white rounded-lg w-full h-full sm:max-w-4xl sm:w-full sm:max-h-[90vh] sm:h-auto overflow-y-auto shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative">
               {/* Close button */}
               <button
                 onClick={closeModal}
-                className="absolute top-4 right-4 z-10 hover:bg-gray-100 rounded-full p-2 shadow-lg transition-all duration-200"
+                className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all duration-200"
               >
-                <svg className="w-6 h-6" fill="none" stroke="black" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="black" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
 
               {/* Project image */}
-              <div className="w-full h-64 overflow-hidden rounded-t-lg">
+              <div className="w-full h-48 sm:h-64 overflow-hidden rounded-t-lg">
                 <img 
                   src={selectedProject.imageUrl} 
                   alt={selectedProject.title}
@@ -403,37 +480,38 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger, isMobileSliding 
               </div>
 
               {/* Project content */}
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-2xl font-bold text-gray-900 libertinus-mono-bold">{selectedProject.title}</h2>
+              <div className="p-4 sm:p-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
+                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 libertinus-mono-bold">{selectedProject.title}</h2>
                   {selectedProject.ghLink && (
                     <button
                       onClick={() => window.open(selectedProject.ghLink, '_blank')}
-                      className="flex-2 bg-transparent hover:bg-gray-100 text-black font-semibold py-3 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2"
+                      className="flex-shrink-0 bg-transparent hover:bg-gray-100 text-black font-semibold py-2 px-4 sm:py-3 sm:px-6 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 border border-gray-300"
                     >
                       <img 
                         src="/icons8-github-64.png" 
                         alt="GitHub" 
-                        className="w-8 h-8"
+                        className="w-6 h-6 sm:w-8 sm:h-8"
                       />
+                      <span className="text-sm sm:text-base">GitHub</span>
                     </button>
                   )}
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-gray-600 leading-relaxed libertinus-mono-regular">{selectedProject.description}</p>
+                    <p className="text-gray-600 leading-relaxed libertinus-mono-regular text-sm sm:text-base">{selectedProject.description}</p>
                   </div>
 
                   {selectedProject.description2 && (
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-800 mb-2 libertinus-mono-regular">Technical Details</h3>
-                      <p className="text-gray-600 leading-relaxed libertinus-mono-regular">{selectedProject.description2}</p>
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 libertinus-mono-regular">Technical Details</h3>
+                      <p className="text-gray-600 leading-relaxed libertinus-mono-regular text-sm sm:text-base">{selectedProject.description2}</p>
                     </div>
                   )}
 
                   {selectedProject.videoUrl && (
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-800 mb-2 libertinus-mono-regular">Demo Video</h3>
+                      <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 libertinus-mono-regular">Demo Video</h3>
                       <video 
                         controls 
                         className="w-full rounded-lg shadow-lg"
@@ -447,11 +525,11 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger, isMobileSliding 
                 </div>
 
                 {/* Action buttons */}
-                <div className="flex gap-4 mt-6">
+                <div className="flex gap-3 sm:gap-4 mt-6">
                   {selectedProject.url && (
                     <button
                       onClick={handleVisitProject}
-                      className="flex-1 bg-slate-400 hover:bg-slate-500 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 libertinus-mono-regular"
+                      className="flex-1 bg-slate-400 hover:bg-slate-500 text-white font-semibold py-3 px-4 sm:px-6 rounded-lg transition-colors duration-200 libertinus-mono-regular text-sm sm:text-base"
                     >
                       Visit Project
                     </button>

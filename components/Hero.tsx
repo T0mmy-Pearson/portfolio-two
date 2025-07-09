@@ -99,8 +99,8 @@ const Hero = ({ onAboutClick, onContactClick }: HeroProps) => {
           {/* Left Column - Hero Content */}
           <div className="flex flex-col flex-1 max-w-lg">
             <h1 className="text-slate-400 text-lg mb-2 opacity-0 animate-fade-in-up libertinus-mono-regular" style={{animationDelay: '1s', animationFillMode: 'forwards'}}>Hi, my name is</h1>
-            <h2 className="text-5xl font-bold mb-4 libertinus-mono-regular opacity-0 animate-fade-in-up border-b-2 border-[#cb4242]" style={{animationDelay: '2.5s', animationFillMode: 'forwards'}}>Tom Pearson.</h2>
-            <div className="border-b border-[#cb4242] space-x-6 flex flex-row animate-fade-in-up opacity-0" style={{animationDelay: '2s', animationFillMode: 'forwards'}}>
+            <h2 className="text-5xl font-bold mb-4 libertinus-mono-regular opacity-0 animate-fade-in-up border-b-2 border-[#cb4242]" style={{animationDelay: '2s', animationFillMode: 'forwards'}}>Tom Pearson.</h2>
+            <div className="border-b border-[#cb4242] space-x-6 flex flex-row animate-fade-in-up opacity-0" style={{animationDelay: '3s', animationFillMode: 'forwards'}}>
               <p 
                 className={`text-l text-gray-400 bb cursor-pointer hover:text-gray-600 hover:scale-110 transition-all duration-200 libertinus-mono-regular animate-pulse-shadow ${clickedLinks.fullStack ? 'line-through' : ''}`}
                 onClick={handleFullStackClick}
