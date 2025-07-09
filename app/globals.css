@@ -363,6 +363,15 @@
   }
 }
 
+@keyframes pulse-shadow {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
 .animate-fade-in-up {
   animation: fade-in-up 0.6s ease-out;
 }
@@ -449,6 +458,10 @@
 
 .animate-scroll-down {
   animation: scroll-down 360s linear infinite;
+}
+
+.animate-pulse-shadow {
+  animation: pulse-shadow 2s ease-in-out infinite;
 }
 
 body {

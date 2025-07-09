@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import emailjs from '@emailjs/browser'
 
 interface ContactProps {
@@ -16,6 +16,20 @@ export default function Contact({ onClose }: ContactProps) {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+
+  // Handle escape key
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose()
+      }
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [onClose])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -58,27 +72,26 @@ export default function Contact({ onClose }: ContactProps) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={onClose}>
       <div 
-        className="bg-[#f0edcf] p-8 rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto"
+        className="bg-[#f0edcf] p-8 rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto relative"
         onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold text-gray-900 libertinus-mono-regular border-b border-[#cb4242] pb-2">
-            Get In Touch
-          </h2>
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
-          >
-            ×
-          </button>
-        </div>
+      > 
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-7 right-8  hover:bg-white text-black rounded-full p-2 transition-colors duration-200 z-10"
+          aria-label="Close contact form"
+        >
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+        </button>
         
         <div className="space-y-6">
-      <h2 className="text-3xl font-bold text-gray-900 libertinus-mono-regular border-b border-[#cb4242] pb-2">
-        Get In Touch
+      <h2 className="text-xl font-bold text-gray-900 libertinus-mono-regular border-b border-[#cb4242] pb-2">
+        Ask Me Anything
       </h2>
       
-      <p className="text-lg text-gray-700 leading-relaxed libertinus-mono-regular">
+      <p className="text-sm text-gray-700 leading-relaxed libertinus-mono-regular">
         I'd love to hear from you! Whether you have a project in mind, want to collaborate, or just want to say hello, feel free to reach out.
       </p>
 

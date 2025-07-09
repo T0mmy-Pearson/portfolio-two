@@ -53,6 +53,44 @@ const PaintTrailEffect = ({ isActive, onDeactivate }: PaintTrailEffectProps) => 
     }
   }, [isActive, currentColor, paintColors, trailIdRef, isMouseDown])
 
+  // Handle touch movement for paint trails (mobile)
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (!isActive) return
+    
+    // Don't prevent default if touching a button or interactive element
+    const target = e.target as Element
+    if (target && (target.tagName === 'BUTTON' || target.closest('button'))) {
+      return
+    }
+    
+    e.preventDefault() // Prevent scrolling while painting
+
+    const touch = e.touches[0]
+    if (!touch) return
+
+    const x = touch.clientX
+    const y = touch.clientY
+
+    // Create new paint trail dot
+    const newTrail: PaintTrail = {
+      id: trailIdRef.current++,
+      x,
+      y,
+      color: currentColor,
+      size: Math.random() * 12 + 6, // Slightly larger for touch (6-18px)
+      opacity: 1,
+      timestamp: Date.now(),
+      isPermanent: isMouseDown // Make trail permanent if touch is held
+    }
+
+    setPaintTrails(prev => [...prev.slice(-200), newTrail])
+
+    // Change color occasionally
+    if (Math.random() < 0.05) {
+      setCurrentColor(paintColors[Math.floor(Math.random() * paintColors.length)])
+    }
+  }, [isActive, currentColor, paintColors, trailIdRef, isMouseDown])
+
   // Handle mouse down/up events
   const handleMouseDown = useCallback((e: MouseEvent) => {
     if (!isActive) return
@@ -61,6 +99,33 @@ const PaintTrailEffect = ({ isActive, onDeactivate }: PaintTrailEffectProps) => 
 
   const handleMouseUp = useCallback((e: MouseEvent) => {
     if (!isActive) return
+    setIsMouseDown(false)
+  }, [isActive])
+
+  // Handle touch start/end events (mobile)
+  const handleTouchStart = useCallback((e: TouchEvent) => {
+    if (!isActive) return
+    
+    // Don't prevent default if touching a button or interactive element
+    const target = e.target as Element
+    if (target && (target.tagName === 'BUTTON' || target.closest('button'))) {
+      return
+    }
+    
+    e.preventDefault()
+    setIsMouseDown(true)
+  }, [isActive])
+
+  const handleTouchEnd = useCallback((e: TouchEvent) => {
+    if (!isActive) return
+    
+    // Don't prevent default if touching a button or interactive element
+    const target = e.target as Element
+    if (target && (target.tagName === 'BUTTON' || target.closest('button'))) {
+      return
+    }
+    
+    e.preventDefault()
     setIsMouseDown(false)
   }, [isActive])
 
@@ -96,9 +161,16 @@ const PaintTrailEffect = ({ isActive, onDeactivate }: PaintTrailEffectProps) => 
   // Add mouse move listener and cursor style
   useEffect(() => {
     if (isActive) {
+      // Mouse events (desktop)
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mousedown', handleMouseDown)
       document.addEventListener('mouseup', handleMouseUp)
+      
+      // Touch events (mobile)
+      document.addEventListener('touchmove', handleTouchMove, { passive: false })
+      document.addEventListener('touchstart', handleTouchStart, { passive: false })
+      document.addEventListener('touchend', handleTouchEnd, { passive: false })
+      
       document.addEventListener('keydown', handleKeyDown)
       document.body.style.cursor = 'url("data:image/svg+xml,%3Csvg width=\'24\' height=\'24\' viewBox=\'0 0 24 24\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M3 21L12 12L21 3L18 0L9 9L0 18L3 21Z\' fill=\'%23333\'/%3E%3C/svg%3E") 12 12, auto'
       
@@ -110,9 +182,16 @@ const PaintTrailEffect = ({ isActive, onDeactivate }: PaintTrailEffectProps) => 
       ;(document.body.style as any).msUserSelect = 'none'
       
       return () => {
+        // Remove mouse events
         document.removeEventListener('mousemove', handleMouseMove)
         document.removeEventListener('mousedown', handleMouseDown)
         document.removeEventListener('mouseup', handleMouseUp)
+        
+        // Remove touch events
+        document.removeEventListener('touchmove', handleTouchMove)
+        document.removeEventListener('touchstart', handleTouchStart)
+        document.removeEventListener('touchend', handleTouchEnd)
+        
         document.removeEventListener('keydown', handleKeyDown)
         document.body.style.cursor = 'auto'
         
@@ -125,7 +204,7 @@ const PaintTrailEffect = ({ isActive, onDeactivate }: PaintTrailEffectProps) => 
         setIsMouseDown(false) // Reset mouse down state when cleaning up
       }
     }
-  }, [isActive, handleMouseMove, handleMouseDown, handleMouseUp, handleKeyDown])
+  }, [isActive, handleMouseMove, handleMouseDown, handleMouseUp, handleTouchMove, handleTouchStart, handleTouchEnd, handleKeyDown])
 
   // Clear trails when deactivated
   useEffect(() => {
@@ -158,15 +237,23 @@ const PaintTrailEffect = ({ isActive, onDeactivate }: PaintTrailEffectProps) => 
       </div>
       
       {/* Exit instruction */}
-      <div className="fixed top-4 left-4 z-50 text-black px-4 py-2 rounded-lg flex items-center gap-3">
-        <div className="text-sm libertinus-mono-regular">
-          <p>ESC = Stop Painting!</p>
-          <p className="text-xs opacity-75">Hold mouse = Permanent paint</p>
+      <div className="fixed top-20 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 text-black px-6 py-4 rounded-lg flex flex-col gap-3">
+        <div className="text-center libertinus-mono-regular">
+          {/* Desktop instructions */}
+          <div className="hidden md:block">
+            <p className="text-sm">ESC = Stop Painting!</p>
+            <p className="text-xs opacity-75">Paint with the Mouse!</p>
+          </div>
+          {/* Mobile instructions */}
+          <div className="block md:hidden">
+            <p className="text-xs opacity-75">Paint with your finger!</p>
+            <p className="text-xs opacity-75">Tap close button to exit</p>
+          </div>
         </div>
-        {/* Mobile close button */}
+        {/* Desktop close button (smaller, less prominent) */}
         <button
           onClick={() => onDeactivate?.()}
-          className="md:hidden bg-black/70 hover:bg-black text-white rounded-full p-1 transition-colors duration-200"
+          className="hidden md:block hover:scale-105 text-black rounded-full p-1 transition-all duration-200 self-center opacity-60 hover:opacity-100"
           aria-label="Stop painting mode"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -174,6 +261,17 @@ const PaintTrailEffect = ({ isActive, onDeactivate }: PaintTrailEffectProps) => 
           </svg>
         </button>
       </div>
+
+      {/* Mobile close button - positioned in top right */}
+      <button
+        onClick={() => onDeactivate?.()}
+        className="fixed top-4 right-4 z-50 hover:scale-105 bg-black/70 hover:bg-black text-white rounded-full p-3 transition-all duration-200 md:hidden"
+        aria-label="Stop painting mode"
+      >
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
     </>
   )
 }
