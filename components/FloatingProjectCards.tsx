@@ -83,30 +83,31 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger }: FloatingProjec
     const timer = setTimeout(() => {
       setIsVisible(true)
       const initialCards = projects.map((project, index) => {
-        // Use section dimensions instead of full screen
-        const sectionWidth = 600 // Approximate section width
-        const sectionHeight = 800 // Approximate section height
+        // Position cards on the left side of the screen in a more structured way
+        const leftMargin = 50
+        const topMargin = 20  // Reduced from 100 to move cards up
+        const cardWidth = 200
+        const cardHeight = 180
+        const spacing = 20
         
-        let x, y
-        let attempts = 0
+        // Calculate grid position (2 columns on left side)
+        const col = index % 2
+        const row = Math.floor(index / 2)
         
-        do {
-          x = Math.random() * (sectionWidth - 300) + 50 // Add margins
-          y = Math.random() * (sectionHeight - 200) + 50
-          attempts++
-        } while (attempts < 20) // Simplified positioning for section
+        const x = leftMargin + (col * (cardWidth + spacing))
+        const y = topMargin + (row * (cardHeight + spacing))
         
         return {
           id: index,
           project,
           x,
           y,
-          animationDelay: index * 1.5, 
-          floatDelay: (index * 3) + 2 
+          animationDelay: index * 0.3, // Faster staggered appearance
+          floatDelay: 0 // No float delay since we're removing bouncing
         }
       })
       setCards(initialCards)
-    }, 1000) // Reduced delay since it's user-triggered
+    }, 500) // Reduced delay
 
     return () => clearTimeout(timer)
   }, [isTriggered])
@@ -140,17 +141,6 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger }: FloatingProjec
     <>
       <div className="absolute inset-0 pointer-events-none">
         {cards.map((card) => {
-
-          const pongAnimations = [
-            'animate-pong-ball-1', 
-            'animate-pong-ball-2', 
-            'animate-pong-ball-3',
-            'animate-pong-ball-4',
-            'animate-pong-ball-5'
-          ]
-          const pongAnimation = pongAnimations[card.id % pongAnimations.length]
-          
-
           const splatShapes = [
             '40% 60% 70% 30% / 60% 30% 70% 40%',
             '60% 40% 30% 70% / 40% 70% 60% 30%',
@@ -160,8 +150,8 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger }: FloatingProjec
           ]
           const splatShape = splatShapes[card.id % splatShapes.length]
           
-          // Random rotation for each splat
-          const rotation = Math.random() * 60 - 30 // Between -30 and 30 degrees
+          // Reduced rotation for more stability
+          const rotation = Math.random() * 20 - 10 // Between -10 and 10 degrees
           
           // Different paint colors for variety
           const paintColors = [
@@ -188,11 +178,12 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger }: FloatingProjec
               onClick={() => handleCardClick(card)}
             >
               <div 
-                className={`relative  p-3  hover:shadow-2xl transition-all duration-300 hover:scale-105 animate-bounce-float ${pongAnimation} w-48`}
+                className="relative p-3 hover:shadow-2xl transition-all duration-300 hover:scale-105 w-48"
                 style={{
-                  animationDelay: `${card.floatDelay}s`,
                   borderRadius: splatShape,
-                  transform: `rotate(${rotation}deg)`
+                  transform: `rotate(${rotation}deg)`,
+                  backgroundColor: paintColor,
+                  opacity: 0.9
                 }}
               >
                 {/* Paint splat drops */}
