@@ -158,7 +158,7 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger, isMobileSliding 
             <h2 className="text-4xl font-bold mb-12 text-center libertinus-mono-regular text-gray-800">
               Projects
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
               {cards.map((card) => {
                 const splatShapes = [
                   '40% 60% 70% 30% / 60% 30% 70% 40%',

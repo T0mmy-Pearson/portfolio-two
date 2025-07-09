@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import Hero from '../components/Hero'
 import Contact from '../components/Contact'
-import About from '../components/About'
 
 export default function Home() {
   const [showAboutModal, setShowAboutModal] = useState(false)
