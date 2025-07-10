@@ -6,7 +6,7 @@ import { useEffect, useState, useRef } from 'react'
 const projects = [
  {
       title:"WIP - projectpartnership",
-      description: "State site design for an energy cooperative based in Aberdeen. Built in React with pure CSS and Javascript.",
+      description: "State site design for an energy cooperative based in Aberdeen. Built in React with pure CSS and Javascript. From development through research, branding and planning, all the way to final code and deployment. Currently working on integrating user feedback and optimizing performance.",
       imageUrl: "https://raw.githubusercontent.com/T0mmy-Pearson/portfolio-two/main/Public/pp.png",
       ghLink: "https://github.com/T0mmy-Pearson/projectpartnership-final",
       url: "https://projectpartnership.netlify.app/",
@@ -22,7 +22,7 @@ const projects = [
     },
      {
       title: "Duologue: poetry slot machine",
-      description: "A  poetry fruit machine that produces unique alignments and word patterns from the long poem \Duologue\. Using react and pure CSS to create a simple slot machine experience and random phrase generator, based on one of my poems. All logic in JS and CSS, no backend.",
+      description: "All logic in JS and CSS, no backend. A  poetry fruit machine that produces unique alignments and word patterns from my 3000 line poem \Duologue\. Using react and pure CSS to create a simple slot machine experience and random phrase generator, based on one the poem. It involved parsing logic to break the poem into an array of lines, and then randomly selecting lines to create unique combinations. The app features a bold casino interface, allowing users to spin the machine and generate new poetic phrases with each click.",
       imageUrl: "https://raw.githubusercontent.com/T0mmy-Pearson/portfolio-two/main/Public/duologue.png",
       ghLink: "https://github.com/T0mmy-Pearson/poem-duolouge",
       url: "https://duologue-slot-machine.netlify.app/"

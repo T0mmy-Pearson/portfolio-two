@@ -6,9 +6,10 @@ import FloatingProjectCards from './FloatingProjectCards'
 interface HeroProps {
   onAboutClick?: () => void
   onContactClick?: () => void
+  onTechStackClick?: () => void
 }
 
-const Hero = ({ onAboutClick, onContactClick }: HeroProps) => {
+const Hero = ({ onAboutClick, onContactClick, onTechStackClick }: HeroProps) => {
   const [showFloatingText, setShowFloatingText] = useState(false)
   const [isPaintMode, setIsPaintMode] = useState(false)
   const [showProjectCards, setShowProjectCards] = useState(false)
@@ -18,7 +19,8 @@ const Hero = ({ onAboutClick, onContactClick }: HeroProps) => {
     fullStack: false,
     artist: false,
     writer: false,
-    contact: false
+    contact: false,
+    techStack: false
   })
 
   useEffect(() => {
@@ -69,6 +71,13 @@ const Hero = ({ onAboutClick, onContactClick }: HeroProps) => {
     setClickedLinks(prev => ({ ...prev, contact: true }))
     if (onContactClick) {
       onContactClick()
+    }
+  }
+
+  const handleTechStackClick = () => {
+    setClickedLinks(prev => ({ ...prev, techStack: true }))
+    if (onTechStackClick) {
+      onTechStackClick()
     }
   }
 
@@ -127,6 +136,12 @@ const Hero = ({ onAboutClick, onContactClick }: HeroProps) => {
                 className={`hover:text-slate-400 hover:scale-210 libertinus-mono-regular cursor-pointer transition-all duration-200 ${clickedLinks.contact ? 'line-through' : ''}`}
               >
                 Contact.
+              </button>
+              <button 
+                onClick={handleTechStackClick}
+                className={`hover:text-slate-400 hover:scale-210 libertinus-mono-regular cursor-pointer transition-all duration-200 ${clickedLinks.techStack ? 'line-through' : ''}`}
+              >
+                Tech Stack.
               </button>
             </ul>
           </div>
