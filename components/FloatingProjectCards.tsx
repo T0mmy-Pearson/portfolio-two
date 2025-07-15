@@ -14,7 +14,7 @@ const projects = [
 {
       title: "Your Job Journal",
       description: "JJ: Job Application Journal is a modern web application designed to help users efficiently track, organize, and reflect on their job search journey. The app allows users to add, update, and manage job applications, visually separate active and rejected applications, and maintain a calendar with notes for important dates. A unique affirmations banner provides motivational support, while a feedback form enables users to share suggestions directly with the developer. The project is built with React for a responsive, component-driven UI and leverages Firebase for authentication and real-time data storage, ensuring user data is secure and accessible across devices. Vite is used as the build tool for fast development and hot module reloading. The app uses EmailJS to handle feedback submissions without a backend server. Styling is managed with custom CSS, supporting multiple color themes for personalization. SVG assets provide a clean, branded look, and the codebase is modular for easy maintenance and future expansion.",
-     imageUrl: "/logo-jj.png",
+     imageUrl: "/logo-jj.svg",
       ghLink: "https://github.com/T0mmy-Pearson/reactjs-job-application-journal",
       url: "https://jobjournal.netlify.app/"
     }
