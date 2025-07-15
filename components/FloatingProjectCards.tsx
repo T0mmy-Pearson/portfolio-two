@@ -11,6 +11,14 @@ const projects = [
       ghLink: "https://github.com/T0mmy-Pearson/projectpartnership-final",
       url: "https://projectpartnership.netlify.app/",
     },
+{
+      title: "Your Job Journal",
+      description: "JJ: Job Application Journal is a modern web application designed to help users efficiently track, organize, and reflect on their job search journey. The app allows users to add, update, and manage job applications, visually separate active and rejected applications, and maintain a calendar with notes for important dates. A unique affirmations banner provides motivational support, while a feedback form enables users to share suggestions directly with the developer. The project is built with React for a responsive, component-driven UI and leverages Firebase for authentication and real-time data storage, ensuring user data is secure and accessible across devices. Vite is used as the build tool for fast development and hot module reloading. The app uses EmailJS to handle feedback submissions without a backend server. Styling is managed with custom CSS, supporting multiple color themes for personalization. SVG assets provide a clean, branded look, and the codebase is modular for easy maintenance and future expansion.",
+     imageUrl: "/logo-jj.png",
+      ghLink: "https://github.com/T0mmy-Pearson/reactjs-job-application-journal",
+      url: "https://jobjournal.netlify.app/"
+    }
+    ,
      {
       title: "CapCheck",
       description: "From the final group project on the Northcoders' bootcamp, CapCheck is a comprehensive mushroom identification app featuring an interactive map with real-time sighting locations, rainfall overlays, and searchable species markers, plus a database of over 250 mushrooms with advanced filtering by edibility and season. The app includes personalized user profiles with photo uploads, discovery tracking, and achievement systems, all built with a mobile-first design supporting both iOS and Android platforms.",
@@ -47,13 +55,6 @@ const projects = [
       imageUrl: "https://raw.githubusercontent.com/T0mmy-Pearson/portfolio-two/main/Public/nc-news.png",
       ghLink: "https://github.com/T0mmy-Pearson/nc-news-app",
       url: "https://ncnews-t0mmy-pearson.netlify.app/"
-    },
-    {
-      title: "A Quick To-Do list",
-      description: "React application that allows users to create, manage, and track their tasks. Quick and easy to use. A tutorial completed during the Northcoders bootcamp, this app features a simple and intuitive interface for task management, allowing users to add, edit, and delete tasks with ease. It includes basic functionality such as task completion tracking and local storage for persistence.",
-      imageUrl: "https://raw.githubusercontent.com/T0mmy-Pearson/portfolio-two/main/Public/Tdl.png",
-      ghLink: "https://github.com/T0mmy-Pearson/your-to-do-list",
-      url: "https://yourquicktodolist.netlify.app/"
     }
 ]
 
