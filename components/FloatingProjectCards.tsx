@@ -4,6 +4,13 @@ import { useEffect, useState, useRef } from 'react'
 
 
 const projects = [
+  {
+      title:"WIP - Artist's Portfolio",
+      description: "Bold, statement driven static site design for an energy cooperative based in Aberdeen. Built in React with CSS and Javascript. From development through research, branding and planning, all the way to final code and deployment. Currently working on integrating user feedback and optimising performance.",
+      imageUrl: "/tpers0n.png",
+      ghLink: "https://github.com/T0mmy-Pearson/artist-website",
+      url: "https://tpers0n.com",
+    },
  {
       title:"WIP - projectpartnership",
       description: "Bold, statement driven static site design for an energy cooperative based in Aberdeen. Built in React with CSS and Javascript. From development through research, branding and planning, all the way to final code and deployment. Currently working on integrating user feedback and optimising performance.",
