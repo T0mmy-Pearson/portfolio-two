@@ -5,9 +5,9 @@ import { useEffect, useState, useRef } from 'react'
 
 const projects = [
   {
-      title:"WIP - Artist's Portfolio",
-      description: "Bold, statement driven static site design for an energy cooperative based in Aberdeen. Built in React with CSS and Javascript. From development through research, branding and planning, all the way to final code and deployment. Currently working on integrating user feedback and optimising performance.",
-      imageUrl: "/tpers0n.png",
+      title:"WIP - Artist's Website",
+      description: "Built with Next.js, featuring a 3D interactive globe, in Three.js, modular navigation, poetry and visual art galleries, and journalism and sound links that open in scrollable modal popups. Responsive, modern, and designed for immersive multimedia storytelling and portfolio presentation.",
+  imageUrl: "https://raw.githubusercontent.com/T0mmy-Pearson/portfolio-two/main/Public/tpers0n.png",
       ghLink: "https://github.com/T0mmy-Pearson/artist-website",
       url: "https://tpers0n.com",
     },
