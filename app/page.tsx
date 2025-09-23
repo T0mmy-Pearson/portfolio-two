@@ -36,7 +36,7 @@ export default function Home() {
   }
 
   return (
-    <div className="relative bg-[#f0edcf]">
+    <div className="relative bg-[#000000]">
       {/* Hero Section - Main content */}
       <Hero 
         onAboutClick={handleShowAbout}

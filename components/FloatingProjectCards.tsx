@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from 'react'
 
-
 const projects = [
   {
       title:"WIP - Artist's Website",
@@ -14,7 +13,7 @@ const projects = [
  {
       title:"WIP - projectpartnership",
       description: "Bold, statement driven static site design for an energy cooperative based in Aberdeen. Built in React with CSS and Javascript. From development through research, branding and planning, all the way to final code and deployment. Currently working on integrating user feedback and optimising performance.",
-      imageUrl: "https://raw.githubusercontent.com/T0mmy-Pearson/portfolio-two/main/Public/pp.png",
+  imageUrl: "https://raw.githubusercontent.com/T0mmy-Pearson/portfolio-two/main/Public/pp.png",
       ghLink: "https://github.com/T0mmy-Pearson/projectpartnership-final",
       url: "https://projectpartnership.netlify.app/",
     },
@@ -65,39 +64,262 @@ const projects = [
     }
 ]
 
-interface FloatingCard {
-  id: number
-  project: typeof projects[0]
-  x: number
-  y: number
-  animationDelay: number
-  floatDelay: number
-}
-
-interface FloatingProjectCardsProps {
+interface ProjectCarouselProps {
   isTriggered?: boolean
   onTrigger?: () => void
   isMobileSliding?: boolean
 }
 
-const FloatingProjectCards = ({ isTriggered = false, onTrigger, isMobileSliding = false }: FloatingProjectCardsProps) => {
-  const [cards, setCards] = useState<FloatingCard[]>([])
-  const [isVisible, setIsVisible] = useState(false)
-  const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null)
+const ProjectCarousel = ({ isTriggered = false, onTrigger, isMobileSliding = false }: ProjectCarouselProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
+  const carouselRef = useRef<HTMLDivElement>(null)
 
+  // Trigger modal when component is triggered
   useEffect(() => {
-    if (!isTriggered) return
+    if (isTriggered) {
+      setIsModalOpen(true)
+    }
+  }, [isTriggered])
 
-    const timer = setTimeout(() => {
-      setIsVisible(true)
-      const initialCards = projects.map((project, index) => {
-        if (isMobileSliding) {
-          // Mobile sliding: simple grid layout
-          return {
-            id: index,
-            project,
-            x: 0,
+  const openModal = () => {
+    setIsModalOpen(true)
+    setCurrentIndex(0)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+    setCurrentIndex(0)
+    if (onTrigger) onTrigger()
+  }
+
+  const nextProject = () => {
+    setCurrentIndex((prev) => (prev + 1) % projects.length)
+  }
+
+  const prevProject = () => {
+    setCurrentIndex((prev) => (prev - 1 + projects.length) % projects.length)
+  }
+
+  const goToProject = (index: number) => {
+    setCurrentIndex(index)
+  }
+
+  // Touch handlers for swipe functionality
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe) {
+      nextProject()
+    }
+    if (isRightSwipe) {
+      prevProject()
+    }
+  }
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isModalOpen) return
+      
+      if (e.key === 'Escape') {
+        closeModal()
+      } else if (e.key === 'ArrowLeft') {
+        prevProject()
+      } else if (e.key === 'ArrowRight') {
+        nextProject()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isModalOpen])
+
+  const currentProject = projects[currentIndex]
+
+  if (!isTriggered && !isModalOpen) return null
+
+  return (
+    <>
+      {/* Modal Backdrop */}
+      {isModalOpen && (
+        <div 
+          className="fixed inset-0 bg-[#18181bcc] backdrop-blur-sm flex items-center justify-center z-[9999] p-4"
+          onClick={closeModal}
+        >
+          {/* Modal Content */}
+          <div 
+            className="bg-[#23272f] rounded-xl w-full max-w-6xl max-h-[90vh] overflow-hidden shadow-2xl border border-[#2563eb]"
+            onClick={(e) => e.stopPropagation()}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            ref={carouselRef}
+          >
+            {/* Header with close button and navigation */}
+            <div className="flex items-center justify-between p-4 border-b border-[#2563eb]">
+              <div className="flex items-center gap-4">
+                <h2 className="text-2xl font-bold text-[#f3f4f6] libertinus-mono-bold">
+                  Projects ({currentIndex + 1}/{projects.length})
+                </h2>
+              </div>
+              
+              {/* Navigation controls */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={prevProject}
+                  className="p-2 hover:bg-[#2563eb] rounded-lg transition-colors text-[#e5e7eb] hover:text-white"
+                  disabled={currentIndex === 0}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                
+                <button
+                  onClick={nextProject}
+                  className="p-2 hover:bg-[#2563eb] rounded-lg transition-colors text-[#e5e7eb] hover:text-white"
+                  disabled={currentIndex === projects.length - 1}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+                
+                <button
+                  onClick={closeModal}
+                  className="p-2 hover:bg-red-600 rounded-lg transition-colors text-[#e5e7eb] hover:text-white ml-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            {/* Project carousel content */}
+            <div className="flex overflow-hidden h-[calc(90vh-8rem)]">
+              {/* Project slides */}
+              <div 
+                className="flex transition-transform duration-300 ease-in-out w-full"
+                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+              >
+                {projects.map((project, index) => (
+                  <div key={index} className="flex-shrink-0 w-full flex flex-col lg:flex-row">
+                    {/* Project image */}
+                    <div className="lg:w-1/2 h-64 lg:h-full">
+                      <img 
+                        src={project.imageUrl} 
+                        alt={project.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    
+                    {/* Project content */}
+                    <div className="lg:w-1/2 p-6 overflow-y-auto">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4 gap-3">
+                        <h3 className="text-xl sm:text-2xl font-bold text-[#f3f4f6] libertinus-mono-bold">
+                          {project.title}
+                        </h3>
+                        {project.ghLink && (
+                          <button
+                            onClick={() => window.open(project.ghLink, '_blank')}
+                            className="flex-shrink-0 bg-transparent hover:bg-[#2563eb] text-[#e5e7eb] hover:text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 border border-[#2563eb]"
+                          >
+                            <img 
+                              src="https://raw.githubusercontent.com/T0mmy-Pearson/portfolio-two/main/Public/icons8-github-64.png" 
+                              alt="GitHub" 
+                              className="w-5 h-5"
+                            />
+                            <span className="text-sm">GitHub</span>
+                          </button>
+                        )}
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <p className="text-[#e5e7eb] leading-relaxed libertinus-mono-regular text-sm">
+                          {project.description}
+                        </p>
+
+                        {project.description2 && (
+                          <div>
+                            <h4 className="text-lg font-semibold text-[#f3f4f6] mb-2 libertinus-mono-regular">
+                              Technical Details
+                            </h4>
+                            <p className="text-[#e5e7eb] leading-relaxed libertinus-mono-regular text-sm">
+                              {project.description2}
+                            </p>
+                          </div>
+                        )}
+
+                        {project.videoUrl && (
+                          <div>
+                            <h4 className="text-lg font-semibold text-[#f3f4f6] mb-2 libertinus-mono-regular">
+                              Demo Video
+                            </h4>
+                            <video 
+                              controls 
+                              className="w-full rounded-lg shadow-lg"
+                              poster={project.imageUrl}
+                            >
+                              <source src={project.videoUrl} type="video/mp4" />
+                              Your browser does not support the video tag.
+                            </video>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Action buttons */}
+                      <div className="flex gap-3 mt-6">
+                        {project.url && (
+                          <button
+                            onClick={() => window.open(project.url, '_blank')}
+                            className="flex-1 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200 libertinus-mono-regular"
+                          >
+                            Visit Project
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Dot indicators */}
+            <div className="flex justify-center gap-2 p-4 border-t border-[#2563eb]">
+              {projects.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToProject(index)}
+                  className={`w-3 h-3 rounded-full transition-colors ${
+                    index === currentIndex 
+                      ? 'bg-[#2563eb]' 
+                      : 'bg-[#e5e7eb] hover:bg-[#2563eb]'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
             y: 0,
             animationDelay: index * 0.2,
             floatDelay: 0
@@ -161,9 +383,9 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger, isMobileSliding 
   if (isMobileSliding) {
     return (
       <>
-        <div className="w-full h-full bg-[#f0edcf] px-8 py-16 overflow-y-auto">
+  <div className="w-full h-full bg-[#18181b] px-8 py-16 overflow-y-auto">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-4xl font-bold mb-12 text-center libertinus-mono-regular text-gray-800">
+            <h2 className="text-4xl font-bold mb-12 text-center libertinus-mono-regular text-[#e5e7eb]">
               Projects
             </h2>
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
@@ -196,7 +418,7 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger, isMobileSliding 
                     onClick={() => handleCardClick(card)}
                   >
                     <div 
-                      className="relative p-4 hover:shadow-2xl transition-all duration-300 hover:scale-105"
+                      className="relative p-4 hover:shadow-2xl transition-all duration-300 hover:scale-105 bg-[#23272f] border border-[#2563eb]"
                       style={{
                         borderRadius: splatShape,
                         transform: `rotate(${rotation}deg)`,
@@ -251,8 +473,8 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger, isMobileSliding 
                           style={{borderRadius: '30% 70% 60% 40%'}}
                         />
                       </div>
-                      <h3 className="text-base font-bold text-gray-900 mb-2 line-clamp-2 drop-shadow-sm relative z-10 libertinus-mono-bold">{card.project.title}</h3>
-                      <p className="text-sm text-gray-700 line-clamp-3 drop-shadow-sm relative z-10 libertinus-mono-regular">{card.project.description}</p>
+                      <h3 className="text-base font-bold text-[#f3f4f6] mb-2 line-clamp-2 drop-shadow-sm relative z-10 libertinus-mono-bold">{card.project.title}</h3>
+                      <p className="text-sm text-[#e5e7eb] line-clamp-3 drop-shadow-sm relative z-10 libertinus-mono-regular">{card.project.description}</p>
                     </div>
                   </div>
                 )
@@ -264,13 +486,13 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger, isMobileSliding 
         {/* Modal for mobile */}
         {isModalOpen && selectedProject && (
           <div 
-            className="fixed inset-0 bg-black/50 flex items-center justify-center z-[9999] p-2 sm:p-4"
+            className="fixed inset-0 bg-[#18181bcc] flex items-center justify-center z-[9999] p-2 sm:p-4"
             onClick={closeModal}
             onKeyDown={handleKeyDown}
             tabIndex={0}
           >
             <div 
-              className="bg-white rounded-lg w-full h-full sm:max-w-4xl sm:w-full sm:max-h-[90vh] sm:h-auto overflow-y-auto shadow-2xl"
+              className="bg-[#23272f] rounded-lg w-full h-full sm:max-w-4xl sm:w-full sm:max-h-[90vh] sm:h-auto overflow-y-auto shadow-2xl border border-[#2563eb]"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="relative">
@@ -490,7 +712,7 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger, isMobileSliding 
               {/* Project content */}
               <div className="p-4 sm:p-6">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
-                  <h2 className="text-xl sm:text-2xl font-bold text-gray-900 libertinus-mono-bold">{selectedProject.title}</h2>
+                  <h2 className="text-xl sm:text-2xl font-bold text-[#f3f4f6] libertinus-mono-bold">{selectedProject.title}</h2>
                   {selectedProject.ghLink && (
                     <button
                       onClick={() => window.open(selectedProject.ghLink, '_blank')}
@@ -501,25 +723,25 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger, isMobileSliding 
                         alt="GitHub" 
                         className="w-6 h-6 sm:w-8 sm:h-8"
                       />
-                      <span className="text-sm sm:text-base">GitHub</span>
+                        <span className="text-sm sm:text-base text-[#e5e7eb]">GitHub</span>
                     </button>
                   )}
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-gray-600 leading-relaxed libertinus-mono-regular text-sm sm:text-base">{selectedProject.description}</p>
+                    <p className="text-[#e5e7eb] leading-relaxed libertinus-mono-regular text-sm sm:text-base">{selectedProject.description}</p>
                   </div>
 
                   {selectedProject.description2 && (
                     <div>
-                      <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 libertinus-mono-regular">Technical Details</h3>
-                      <p className="text-gray-600 leading-relaxed libertinus-mono-regular text-sm sm:text-base">{selectedProject.description2}</p>
+                        <h3 className="text-base sm:text-lg font-semibold text-[#f3f4f6] mb-2 libertinus-mono-regular">Technical Details</h3>
+                        <p className="text-[#e5e7eb] leading-relaxed libertinus-mono-regular text-sm sm:text-base">{selectedProject.description2}</p>
                     </div>
                   )}
 
                   {selectedProject.videoUrl && (
                     <div>
-                      <h3 className="text-base sm:text-lg font-semibold text-gray-800 mb-2 libertinus-mono-regular">Demo Video</h3>
+                        <h3 className="text-base sm:text-lg font-semibold text-[#f3f4f6] mb-2 libertinus-mono-regular">Demo Video</h3>
                       <video 
                         controls 
                         className="w-full rounded-lg shadow-lg"
@@ -537,7 +759,7 @@ const FloatingProjectCards = ({ isTriggered = false, onTrigger, isMobileSliding 
                   {selectedProject.url && (
                     <button
                       onClick={handleVisitProject}
-                      className="flex-1 bg-slate-400 hover:bg-slate-500 text-white font-semibold py-3 px-4 sm:px-6 rounded-lg transition-colors duration-200 libertinus-mono-regular text-sm sm:text-base"
+                        className="flex-1 bg-[#2563eb] hover:bg-[#1d4ed8] text-white font-semibold py-3 px-4 sm:px-6 rounded-lg transition-colors duration-200 libertinus-mono-regular text-sm sm:text-base"
                     >
                       Visit Project
                     </button>

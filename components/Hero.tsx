@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import WriterPortfolio from './WriterPortfolio'
 import PaintTrailEffect from './PaintTrailEffect'
-import FloatingProjectCards from './FloatingProjectCards'
+import ProjectCarousel from './ProjectCarousel'
 
 interface HeroProps {
   onAboutClick?: () => void
@@ -169,11 +169,11 @@ const Hero = ({ onAboutClick, onContactClick, onTechStackClick }: HeroProps) => 
               </div>
             )}
             
-            {/* Project Cards for mobile */}
+            {/* Project Carousel for mobile */}
             {showProjectCards && (
-              <FloatingProjectCards 
+              <ProjectCarousel 
                 isTriggered={showProjectCards}
-                onTrigger={() => setShowProjectCards(true)}
+                onTrigger={() => setShowProjectCards(false)}
                 isMobileSliding={true}
               />
             )}
@@ -181,11 +181,11 @@ const Hero = ({ onAboutClick, onContactClick, onTechStackClick }: HeroProps) => 
         )}
       </div>
 
-      {/* Desktop Floating Project Cards - overlay style for desktop */}
+      {/* Desktop Project Carousel - modal style for desktop */}
       {!isMobile && (
-        <FloatingProjectCards 
+        <ProjectCarousel 
           isTriggered={showProjectCards}
-          onTrigger={() => setShowProjectCards(true)}
+          onTrigger={() => setShowProjectCards(false)}
           isMobileSliding={false}
         />
       )}
