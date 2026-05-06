@@ -6,60 +6,26 @@ import Contact from '../components/Contact'
 import About from '../components/About'
 import TechStack from '../components/TechStack'
 
+export type ActivePanel =
+  | 'about'
+  | 'contact'
+  | 'techStack'
+  | 'projects'
+  | 'writer'
+  | 'paint'
+  | null
+
 export default function Home() {
-  const [showAboutModal, setShowAboutModal] = useState(false)
-  const [showContactModal, setShowContactModal] = useState(false)
-  const [showTechStackModal, setShowTechStackModal] = useState(false)
-
-  const handleShowAbout = () => {
-    setShowAboutModal(true)
-  }
-
-  const handleCloseAbout = () => {
-    setShowAboutModal(false)
-  }
-
-  const handleShowContact = () => {
-    setShowContactModal(true)
-  }
-
-  const handleCloseContact = () => {
-    setShowContactModal(false)
-  }
-
-  const handleShowTechStack = () => {
-    setShowTechStackModal(true)
-  }
-
-  const handleCloseTechStack = () => {
-    setShowTechStackModal(false)
-  }
+  const [activePanel, setActivePanel] = useState<ActivePanel>(null)
+  const closePanel = () => setActivePanel(null)
 
   return (
-    <div className="relative bg-[#000000]">
-      {/* Hero Section - Main content */}
-      <Hero 
-        onAboutClick={handleShowAbout}
-        onContactClick={handleShowContact}
-        onTechStackClick={handleShowTechStack}
-      />
+    <div className="relative bg-white">
+      <Hero activePanel={activePanel} onActivate={setActivePanel} />
 
-      {/* Contact Modal Overlay */}
-      {showContactModal && (
-        <Contact onClose={handleCloseContact} />
-      )}
-
-      {/* About Modal Overlay */}
-      {showAboutModal && (
-        <About onClose={handleCloseAbout} />
-      )}
-
-      {/* Tech Stack Modal Overlay */}
-      {showTechStackModal && (
-        <TechStack onClose={handleCloseTechStack} />
-      )}
-
-  
+      {activePanel === 'contact' && <Contact onClose={closePanel} />}
+      {activePanel === 'about' && <About onClose={closePanel} />}
+      {activePanel === 'techStack' && <TechStack onClose={closePanel} />}
     </div>
   )
 }

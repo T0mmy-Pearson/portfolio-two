@@ -2,17 +2,14 @@ import React, { useState, useEffect } from 'react'
 import WriterPortfolio from './WriterPortfolio'
 import PaintTrailEffect from './PaintTrailEffect'
 import ProjectCarousel from './ProjectCarousel'
+import type { ActivePanel } from '../app/page'
 
 interface HeroProps {
-  onAboutClick?: () => void
-  onContactClick?: () => void
-  onTechStackClick?: () => void
+  activePanel: ActivePanel
+  onActivate: (panel: ActivePanel) => void
 }
 
-const Hero = ({ onAboutClick, onContactClick, onTechStackClick }: HeroProps) => {
-  const [showFloatingText, setShowFloatingText] = useState(false)
-  const [isPaintMode, setIsPaintMode] = useState(false)
-  const [showProjectCards, setShowProjectCards] = useState(false)
+const Hero = ({ activePanel, onActivate }: HeroProps) => {
   const [isMobile, setIsMobile] = useState(false)
   const [isSliding, setIsSliding] = useState(false)
   const [clickedLinks, setClickedLinks] = useState({
@@ -23,123 +20,114 @@ const Hero = ({ onAboutClick, onContactClick, onTechStackClick }: HeroProps) => 
     techStack: false
   })
 
+  const showProjectCards = activePanel === 'projects'
+  const showFloatingText = activePanel === 'writer'
+  const isPaintMode = activePanel === 'paint'
+
   useEffect(() => {
-    // Check if device is mobile (below lg breakpoint)
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024)
     }
-    
+
     checkMobile()
     window.addEventListener('resize', checkMobile)
-    
+
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
   const handleFullStackClick = () => {
     setClickedLinks(prev => ({ ...prev, fullStack: true }))
     if (isMobile) {
-      // Mobile: close WriterPortfolio and use sliding behavior
-      setShowFloatingText(false)
       setIsSliding(true)
-      setTimeout(() => {
-        setShowProjectCards(true)
-      }, 50)
+      setTimeout(() => onActivate('projects'), 50)
     } else {
-      // Desktop: show floating cards immediately
-      setShowProjectCards(true)
+      onActivate('projects')
     }
   }
 
   const handleBackToHero = () => {
-    setShowProjectCards(false)
-    setTimeout(() => {
-      setIsSliding(false)
-    }, 300) // Wait for slide animation to complete
+    onActivate(null)
+    setTimeout(() => setIsSliding(false), 300)
   }
 
   const handleArtistClick = () => {
     setClickedLinks(prev => ({ ...prev, artist: true }))
-    setIsPaintMode(true)
+    onActivate('paint')
   }
 
   const handleWriterClick = () => {
     setClickedLinks(prev => ({ ...prev, writer: true }))
-    setShowFloatingText(true)
+    onActivate('writer')
   }
 
   const handleContactClick = () => {
     setClickedLinks(prev => ({ ...prev, contact: true }))
-    if (onContactClick) {
-      onContactClick()
-    }
+    onActivate('contact')
   }
 
   const handleTechStackClick = () => {
     setClickedLinks(prev => ({ ...prev, techStack: true }))
-    if (onTechStackClick) {
-      onTechStackClick()
-    }
+    onActivate('techStack')
   }
 
   return (
     <>
       {/* Mobile Writer Portfolio - appears above hero on mobile/tablet */}
       {isMobile && showFloatingText && (
-        <WriterPortfolio 
-          isVisible={showFloatingText} 
-          onClose={() => setShowFloatingText(false)} 
+        <WriterPortfolio
+          isVisible={showFloatingText}
+          onClose={() => onActivate(null)}
         />
       )}
 
       {/* Main container - conditional sliding behavior for mobile only */}
-      <div className={`relative min-h-screen bg-[#f0edcf] ${isMobile ? 'overflow-hidden' : ''}`}>
-        
+      <div className={`relative min-h-screen bg-white ${isMobile ? 'overflow-hidden' : ''}`}>
+
         {/* Hero Section Panel */}
-        <section 
-          className={`${isMobile ? 'absolute inset-0 pt-64' : 'min-h-screen pt-64'} flex flex-row justify-center items-center px-12 ${
-            isMobile && showProjectCards 
-              ? 'transition-transform duration-700 ease-in-out -translate-x-full' 
-              : isMobile 
+        <section
+          className={`${isMobile ? 'absolute inset-0 pt-16' : 'min-h-screen pt-16'} flex flex-col items-start justify-start px-12 ${
+            isMobile && showProjectCards
+              ? 'transition-transform duration-700 ease-in-out -translate-x-full'
+              : isMobile
                 ? 'transition-transform duration-700 ease-in-out translate-x-0'
                 : ''
           }`}
           id="hero"
         >
-          {/* Left Column - Hero Content */}
-          <div className="flex flex-col flex-1 max-w-lg">
-            <h1 className="text-slate-400 text-lg mb-2 opacity-0 animate-fade-in-up libertinus-mono-regular" style={{animationDelay: '1s', animationFillMode: 'forwards'}}>Hi, my name is</h1>
-            <h2 className="text-5xl font-bold mb-4 libertinus-mono-regular opacity-0 animate-fade-in-up border-b-2 border-[#cb4242]" style={{animationDelay: '2s', animationFillMode: 'forwards'}}>Tom Pearson.</h2>
-            <div className="border-b border-[#cb4242] space-x-6 flex flex-row animate-fade-in-up opacity-0" style={{animationDelay: '3s', animationFillMode: 'forwards'}}>
-              <p 
-                className={`text-l text-gray-400 bb cursor-pointer hover:text-gray-600 hover:scale-110 transition-all duration-200 libertinus-mono-regular animate-pulse-shadow ${clickedLinks.fullStack ? 'line-through' : ''}`}
+          {/* Hero Content - top left, constrained to left half */}
+          <div className="flex flex-col w-full md:w-1/2 md:pr-8">
+            <h1 className="text-6xl md:text-8xl xl:text-9xl font-bold mb-8 libertinus-mono-regular opacity-0 animate-fade-in-up border-b-2 border-black pb-4" style={{animationDelay: '2s', animationFillMode: 'forwards'}}>Tom Pearson.</h1>
+            <div className="border-b border-black flex flex-row flex-wrap gap-x-8 md:gap-x-12 gap-y-2 pb-4 animate-fade-in-up opacity-0" style={{animationDelay: '3s', animationFillMode: 'forwards'}}>
+              <p
+                className={`text-2xl md:text-3xl xl:text-4xl text-gray-400 cursor-pointer hover:text-gray-700 hover:scale-105 transition-all duration-200 libertinus-mono-regular animate-pulse-shadow ${clickedLinks.fullStack ? 'line-through' : ''}`}
                 onClick={handleFullStackClick}
               >
                 Full-Stack Developer.
               </p>
-              <p 
-                className={`text-l text-gray-400 text-right cursor-pointer hover:text-gray-600 hover:scale-110 transition-all duration-200 libertinus-mono-regular animate-pulse-shadow ${clickedLinks.artist ? 'line-through' : ''}`}
+              <p
+                className={`text-2xl md:text-3xl xl:text-4xl text-gray-400 cursor-pointer hover:text-gray-700 hover:scale-105 transition-all duration-200 libertinus-mono-regular animate-pulse-shadow ${clickedLinks.artist ? 'line-through' : ''}`}
                 onClick={handleArtistClick}
               >
                 Artist.
               </p>
-              <p 
-                className={`text-l text-gray-400 text-right cursor-pointer hover:text-gray-600 hover:scale-110 transition-all duration-200 libertinus-mono-regular animate-pulse-shadow ${clickedLinks.writer ? 'line-through' : ''}`}
+              <p
+                className={`text-2xl md:text-3xl xl:text-4xl text-gray-400 cursor-pointer hover:text-gray-700 hover:scale-105 transition-all duration-200 libertinus-mono-regular animate-pulse-shadow ${clickedLinks.writer ? 'line-through' : ''}`}
                 onClick={handleWriterClick}
               >
                 Writer.
               </p>
             </div>
             {/* Navigation Links */}
-            <ul className="flex gap-8 text-right font-medium mt-4 opacity-0 animate-fade-in-up" style={{animationDelay: '4.5s', animationFillMode: 'forwards'}}>
-              <button 
+            <ul className="flex flex-wrap gap-x-12 gap-y-2 font-medium mt-8 opacity-0 animate-fade-in-up" style={{animationDelay: '4.5s', animationFillMode: 'forwards'}}>
+              <button
                 onClick={handleContactClick}
-                className={`hover:text-slate-400 hover:scale-210 libertinus-mono-regular cursor-pointer transition-all duration-200 ${clickedLinks.contact ? 'line-through' : ''}`}
+                className={`text-xl md:text-2xl xl:text-3xl hover:text-gray-500 hover:scale-105 libertinus-mono-regular cursor-pointer transition-all duration-200 ${clickedLinks.contact ? 'line-through' : ''}`}
               >
                 Contact.
               </button>
-              <button 
+              <button
                 onClick={handleTechStackClick}
-                className={`hover:text-slate-400 hover:scale-210 libertinus-mono-regular cursor-pointer transition-all duration-200 ${clickedLinks.techStack ? 'line-through' : ''}`}
+                className={`text-xl md:text-2xl xl:text-3xl hover:text-gray-500 hover:scale-105 libertinus-mono-regular cursor-pointer transition-all duration-200 ${clickedLinks.techStack ? 'line-through' : ''}`}
               >
                 Tech Stack.
               </button>
@@ -149,7 +137,7 @@ const Hero = ({ onAboutClick, onContactClick, onTechStackClick }: HeroProps) => 
 
         {/* Mobile Projects Panel - slides in from right (mobile only) */}
         {isMobile && (
-          <section 
+          <section
             className={`absolute inset-0 flex flex-col transition-transform duration-700 ease-in-out ${
               showProjectCards ? 'translate-x-0' : 'translate-x-full'
             }`}
@@ -168,12 +156,12 @@ const Hero = ({ onAboutClick, onContactClick, onTechStackClick }: HeroProps) => 
                 </button>
               </div>
             )}
-            
+
             {/* Project Carousel for mobile */}
             {showProjectCards && (
-              <ProjectCarousel 
+              <ProjectCarousel
                 isTriggered={showProjectCards}
-                onTrigger={() => setShowProjectCards(false)}
+                onTrigger={() => onActivate(null)}
                 isMobileSliding={true}
               />
             )}
@@ -183,25 +171,25 @@ const Hero = ({ onAboutClick, onContactClick, onTechStackClick }: HeroProps) => 
 
       {/* Desktop Project Carousel - modal style for desktop */}
       {!isMobile && (
-        <ProjectCarousel 
+        <ProjectCarousel
           isTriggered={showProjectCards}
-          onTrigger={() => setShowProjectCards(false)}
+          onTrigger={() => onActivate(null)}
           isMobileSliding={false}
         />
       )}
 
       {/* Desktop Writer Portfolio Overlay - only on desktop */}
       {!isMobile && (
-        <WriterPortfolio 
-          isVisible={showFloatingText} 
-          onClose={() => setShowFloatingText(false)} 
+        <WriterPortfolio
+          isVisible={showFloatingText}
+          onClose={() => onActivate(null)}
         />
       )}
 
       {/* Paint Trail Effect */}
-      <PaintTrailEffect 
+      <PaintTrailEffect
         isActive={isPaintMode}
-        onDeactivate={() => setIsPaintMode(false)}
+        onDeactivate={() => onActivate(null)}
       />
     </>
   )

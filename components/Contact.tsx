@@ -70,11 +70,10 @@ export default function Contact({ onClose }: ContactProps) {
   }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={onClose}>
-      <div 
-        className="bg-[#f0edcf] p-8 rounded-lg max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto relative"
-        onClick={(e) => e.stopPropagation()}
-      > 
+    <div className="fixed top-0 right-0 bottom-0 w-full md:w-1/2 bg-white border-l border-black z-50 overflow-y-auto">
+      <div
+        className="p-8 relative"
+      >
         {/* Close button */}
         <button
           onClick={onClose}
@@ -87,7 +86,7 @@ export default function Contact({ onClose }: ContactProps) {
         </button>
         
         <div className="space-y-6">
-      <h2 className="text-xl font-bold text-gray-900 libertinus-mono-regular border-b border-[#cb4242] pb-2">
+      <h2 className="text-xl font-bold text-gray-900 libertinus-mono-regular border-b border-black pb-2">
         Ask Me Anything
       </h2>
       
@@ -108,7 +107,7 @@ export default function Contact({ onClose }: ContactProps) {
               required
               value={formData.name}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-[#cb4242]/30 rounded-md focus:outline-none focus:ring-2 focus:ring-[#cb4242]/50 focus:border-[#cb4242] bg-white/80 libertinus-mono-regular"
+              className="w-full px-3 py-2 border border-black rounded-none focus:outline-none focus:ring-1 focus:ring-black focus:border-black bg-white libertinus-mono-regular"
               placeholder="Your name"
             />
           </div>
@@ -124,7 +123,7 @@ export default function Contact({ onClose }: ContactProps) {
               required
               value={formData.email}
               onChange={handleChange}
-              className="w-full px-3 py-2 border border-[#cb4242]/30 rounded-md focus:outline-none focus:ring-2 focus:ring-[#cb4242]/50 focus:border-[#cb4242] bg-white/80 libertinus-mono-regular"
+              className="w-full px-3 py-2 border border-black rounded-none focus:outline-none focus:ring-1 focus:ring-black focus:border-black bg-white libertinus-mono-regular"
               placeholder="your.email@example.com"
             />
           </div>
@@ -140,7 +139,7 @@ export default function Contact({ onClose }: ContactProps) {
             name="subject"
             value={formData.subject}
             onChange={handleChange}
-            className="w-full px-3 py-2 border border-[#cb4242]/30 rounded-md focus:outline-none focus:ring-2 focus:ring-[#cb4242]/50 focus:border-[#cb4242] bg-white/80 libertinus-mono-regular"
+            className="w-full px-3 py-2 border border-black rounded-none focus:outline-none focus:ring-1 focus:ring-black focus:border-black bg-white libertinus-mono-regular"
             placeholder="What's this about?"
           />
         </div>
@@ -156,7 +155,7 @@ export default function Contact({ onClose }: ContactProps) {
             value={formData.message}
             onChange={handleChange}
             rows={5}
-            className="w-full px-3 py-2 border border-[#cb4242]/30 rounded-md focus:outline-none focus:ring-2 focus:ring-[#cb4242]/50 focus:border-[#cb4242] bg-white/80 resize-vertical libertinus-mono-regular"
+            className="w-full px-3 py-2 border border-black rounded-none focus:outline-none focus:ring-1 focus:ring-black focus:border-black bg-white resize-vertical libertinus-mono-regular"
             placeholder="Tell me about your project or just say hello!"
           />
         </div>
@@ -164,7 +163,7 @@ export default function Contact({ onClose }: ContactProps) {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-[#cb4242] hover:bg-[#cb4242]/80 disabled:bg-[#cb4242]/50 text-white font-semibold py-3 px-6 rounded-md transition-colors duration-200 libertinus-mono-regular"
+          className="w-full bg-black hover:bg-gray-800 disabled:bg-gray-400 text-white font-semibold py-3 px-6 rounded-none transition-colors duration-200 libertinus-mono-regular"
         >
           {isSubmitting ? 'Sending Message...' : 'Send Message'}
         </button>
@@ -182,12 +181,12 @@ export default function Contact({ onClose }: ContactProps) {
         )}
       </form>
 
-        <div className="pt-4 border-t border-[#cb4242]/20">
+        <div className="pt-4 border-t border-black">
           <p className="text-center text-gray-600 libertinus-mono-regular">
             Or email me directly at:{' '}
-            <a 
-              href="mailto:tundraperson@gmail.com" 
-              className="text-[#cb4242] hover:underline font-medium"
+            <a
+              href="mailto:tundraperson@gmail.com"
+              className="text-black underline hover:opacity-60 font-medium"
             >
               tundraperson@gmail.com
             </a>

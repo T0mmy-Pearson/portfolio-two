@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -465,17 +467,17 @@
 }
 
 body {
-  font-family: 'Libertinus Mono', monospace;
+  font-family: 'JetBrains Mono', 'Libertinus Mono', monospace;
 }
 .libertinus-mono-regular {
-  font-family: "Libertinus Mono", monospace;
+  font-family: "JetBrains Mono", "Libertinus Mono", monospace;
   font-weight: 400;
   font-style: normal;
   color: #000000
 }
 
 .libertinus-mono-bold {
-  font-family: "Libertinus Mono", monospace;
+  font-family: "JetBrains Mono", "Libertinus Mono", monospace;
   font-weight: 700;
   font-style: normal;
   color: #000000

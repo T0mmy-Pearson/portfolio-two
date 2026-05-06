@@ -96,18 +96,18 @@ const TechStack = ({ onClose }: TechStackProps) => {
     : techStacks[activeCategory as keyof typeof techStacks]?.technologies || []
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-[#f0edcf] rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+    <div className="fixed top-0 right-0 bottom-0 w-full md:w-1/2 bg-white border-l border-black z-50 overflow-y-auto">
+      <div className="flex flex-col min-h-full">
         {/* Header */}
-        <div className="border border-[#cb4242]/20 from-gray-800 to-gray-900 text-white p-6">
+        <div className="border-b border-black p-6">
           <div className="flex justify-between items-center">
             <div>
-              <h2 className="text-2xl font-bold mb-2 libertinus-mono-bold">Tech Stack</h2>
-              <p className="text-gray-300 libertinus-mono-regular">Technologies I work with</p>
+              <h2 className="text-2xl font-bold mb-1 libertinus-mono-bold">Tech Stack</h2>
+              <p className="text-gray-600 libertinus-mono-regular">Technologies I work with</p>
             </div>
             <button
               onClick={onClose}
-              className="text-white hover:text-gray-300 transition-colors duration-200"
+              className="text-black hover:opacity-60 transition-opacity duration-200"
               aria-label="Close modal"
             >
               <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,14 +118,14 @@ const TechStack = ({ onClose }: TechStackProps) => {
         </div>
 
         {/* Category Filters */}
-        <div className="p-6 border-b border-[#cb4242]/20">
+        <div className="p-6 border-b border-black">
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setActiveCategory('all')}
-              className={`px-4 py-2 rounded-full transition-all duration-200 libertinus-mono-regular ${
-                activeCategory === 'all' 
-                  ? 'bg-[#cb4242] text-white shadow-lg' 
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+              className={`px-4 py-2 rounded-none transition-all duration-200 libertinus-mono-regular border border-black ${
+                activeCategory === 'all'
+                  ? 'bg-black text-white'
+                  : 'bg-white text-black hover:bg-gray-100'
               }`}
             >
               All ({allTechnologies.length})
@@ -134,10 +134,10 @@ const TechStack = ({ onClose }: TechStackProps) => {
               <button
                 key={key}
                 onClick={() => setActiveCategory(key)}
-                className={`px-4 py-2 rounded-full transition-all duration-200 libertinus-mono-regular ${
-                  activeCategory === key 
-                    ? `${category.color} text-white shadow-lg` 
-                    : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
+                className={`px-4 py-2 rounded-none transition-all duration-200 libertinus-mono-regular border border-black ${
+                  activeCategory === key
+                    ? 'bg-black text-white'
+                    : 'bg-white text-black hover:bg-gray-100'
                 }`}
               >
                 {category.name} ({category.technologies.length})
@@ -147,12 +147,12 @@ const TechStack = ({ onClose }: TechStackProps) => {
         </div>
 
         {/* Technologies Grid */}
-        <div className="p-6 overflow-y-auto max-h-[60vh]">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="p-6 overflow-y-auto flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {(activeCategory === 'all' ? allTechnologies : filteredTechnologies).map((tech, index) => (
-              <div 
+              <div
                 key={`${tech.name}-${index}`}
-                className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer hover:border-[#cb4242]/30"
+                className="bg-white border border-black rounded-none p-4 transition-all duration-200 hover:bg-gray-50"
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-3">
@@ -170,8 +170,8 @@ const TechStack = ({ onClose }: TechStackProps) => {
                           if (fallback) fallback.style.display = 'flex';
                         }}
                       />
-                      <div 
-                        className="w-6 h-6 bg-[#cb4242] rounded text-white text-xs flex items-center justify-center font-bold"
+                      <div
+                        className="w-6 h-6 bg-black rounded-none text-white text-xs flex items-center justify-center font-bold"
                         style={{ display: 'none' }}
                       >
                         {tech.name.charAt(0)}
@@ -191,9 +191,9 @@ const TechStack = ({ onClose }: TechStackProps) => {
         </div>
 
         {/* Footer */}
-        <div className="bg-gray-50 p-4 text-center border-t border-[#cb4242]/20">
+        <div className="bg-white p-4 text-center border-t border-black">
           <p className="text-sm text-gray-600 libertinus-mono-regular">
-            Always learning and exploring new technologies 🚀
+            Always learning and exploring new technologies
           </p>
         </div>
       </div>

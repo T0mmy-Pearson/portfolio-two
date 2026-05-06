@@ -162,185 +162,157 @@ const ProjectCarousel = ({ isTriggered = false, onTrigger, isMobileSliding = fal
 
   return (
     <>
-      {/* Modal Backdrop */}
       {isModalOpen && (
-        <div 
-          className="fixed inset-0 bg-[#f0edcf]/90 backdrop-blur-md flex items-center justify-center z-[9999] p-4"
-          onClick={closeModal}
+        <div
+          className="fixed top-0 right-0 bottom-0 w-full md:w-1/2 bg-white border-l border-black z-[9999] flex flex-col"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+          ref={carouselRef}
         >
-          {/* Modal Content */}
-          <div 
-            className="bg-[#f0edcf] rounded-2xl w-full max-w-6xl max-h-[90vh] overflow-hidden shadow-2xl border-2 border-[#cb4242]/50"
-            onClick={(e) => e.stopPropagation()}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-            ref={carouselRef}
-          >
-            {/* Header with close button and navigation */}
-            <div className="flex items-center justify-between p-6 border-b border-[#cb4242]/30 bg-gradient-to-r from-[#f0edcf] to-[#ede8c3]">
-              <div className="flex items-center gap-4">
-                <h2 className="text-2xl font-bold text-[#2d3748] libertinus-mono-bold">
-                  Projects
-                </h2>
-                <div className="text-sm text-[#4a5568] libertinus-mono-regular bg-[#cb4242]/10 px-3 py-1 rounded-full">
-                  {currentIndex + 1} of {projects.length}
-                </div>
-              </div>
-              
-              {/* Navigation controls */}
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={prevProject}
-                  className="p-3 hover:bg-[#cb4242]/20 rounded-xl transition-all duration-200 text-[#2d3748] hover:text-[#cb4242] border border-[#cb4242]/20 hover:border-[#cb4242]/40 disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={currentIndex === 0}
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-                
-                <button
-                  onClick={nextProject}
-                  className="p-3 hover:bg-[#cb4242]/20 rounded-xl transition-all duration-200 text-[#2d3748] hover:text-[#cb4242] border border-[#cb4242]/20 hover:border-[#cb4242]/40 disabled:opacity-50 disabled:cursor-not-allowed"
-                  disabled={currentIndex === projects.length - 1}
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-                
-                <button
-                  onClick={closeModal}
-                  className="p-3 hover:bg-red-500/20 rounded-xl transition-all duration-200 text-[#2d3748] hover:text-red-600 border border-red-500/20 hover:border-red-500/40 ml-2"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
+          {/* Header */}
+          <div className="flex items-center justify-between p-6 border-b border-black bg-white">
+            <div className="flex items-baseline gap-4">
+              <h2 className="text-2xl font-bold libertinus-mono-bold">Projects</h2>
+              <div className="text-sm text-gray-600 libertinus-mono-regular">
+                {currentIndex + 1} / {projects.length}
               </div>
             </div>
 
-            {/* Project carousel content */}
-            <div className="flex overflow-hidden h-[calc(90vh-10rem)] bg-gradient-to-br from-[#f0edcf] to-[#ede8c3]">
-              {/* Project slides */}
-              <div 
-                className="flex transition-transform duration-500 ease-out w-full"
-                style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={prevProject}
+                className="p-2 border border-black hover:bg-black hover:text-white transition-colors duration-150 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-black"
+                disabled={currentIndex === 0}
+                aria-label="Previous project"
               >
-                {projects.map((project, index) => (
-                  <div key={index} className="flex-shrink-0 w-full flex flex-col lg:flex-row">
-                    {/* Project image */}
-                    <div className="lg:w-1/2 h-64 lg:h-full relative overflow-hidden bg-white/40">
-                      <div className="absolute inset-0 bg-gradient-to-r from-[#cb4242]/20 to-transparent z-10"></div>
-                      <img 
-                        src={project.imageUrl} 
-                        alt={project.title}
-                        className={`w-full h-full transition-transform duration-700 hover:scale-105 ${
-                          project.title.includes('projectpartnership') 
-                            ? 'object-contain' 
-                            : 'object-cover'
-                        }`}
-                      />
-                    </div>
-                    
-                    {/* Project content */}
-                    <div className="lg:w-1/2 p-8 overflow-y-auto bg-gradient-to-br from-[#f0edcf] to-[#ede8c3]">
-                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-6 gap-4">
-                        <h3 className="text-2xl sm:text-3xl font-bold text-[#2d3748] libertinus-mono-bold leading-tight">
-                          {project.title}
-                        </h3>
-                        {project.ghLink && (
-                          <button
-                            onClick={() => window.open(project.ghLink, '_blank')}
-                            className="flex-shrink-0 bg-[#cb4242]/10 hover:bg-[#cb4242]/20 text-[#cb4242] hover:text-[#a53333] font-semibold py-3 px-5 rounded-xl transition-all duration-200 flex items-center justify-center gap-3 border border-[#cb4242]/30 hover:border-[#cb4242]/50 hover:shadow-lg hover:shadow-[#cb4242]/10"
-                          >
-                            <img 
-                              src="https://raw.githubusercontent.com/T0mmy-Pearson/portfolio-two/main/Public/icons8-github-64.png" 
-                              alt="GitHub" 
-                              className="w-5 h-5 opacity-80"
-                            />
-                            <span className="text-sm font-medium">View Code</span>
-                          </button>
-                        )}
-                      </div>
-                      
-                      <div className="space-y-6">
-                        <div className="bg-white/60 p-5 rounded-xl border border-[#cb4242]/20 shadow-sm">
-                          <p className="text-[#2d3748] leading-relaxed libertinus-mono-regular text-sm leading-7">
-                            {project.description}
-                          </p>
-                        </div>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
 
-                        {project.description2 && (
-                          <div className="bg-white/60 p-5 rounded-xl border border-[#cb4242]/20 shadow-sm">
-                            <h4 className="text-lg font-semibold text-[#cb4242] mb-3 libertinus-mono-bold flex items-center gap-2">
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                              </svg>
-                              Technical Details
-                            </h4>
-                            <p className="text-[#2d3748] leading-relaxed libertinus-mono-regular text-sm leading-7">
-                              {project.description2}
-                            </p>
-                          </div>
-                        )}
+              <button
+                onClick={nextProject}
+                className="p-2 border border-black hover:bg-black hover:text-white transition-colors duration-150 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-black"
+                disabled={currentIndex === projects.length - 1}
+                aria-label="Next project"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
 
-                        {project.videoUrl && (
-                          <div className="bg-white/60 p-5 rounded-xl border border-[#cb4242]/20 shadow-sm">
-                            <h4 className="text-lg font-semibold text-[#cb4242] mb-3 libertinus-mono-bold flex items-center gap-2">
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1.586a1 1 0 01.707.293l2.414 2.414a1 1 0 00.707.293H15" />
-                              </svg>
-                              Demo Video
-                            </h4>
-                            <video 
-                              controls 
-                              className="w-full rounded-lg shadow-lg border border-[#cb4242]/20"
-                              poster={project.imageUrl}
-                            >
-                              <source src={project.videoUrl} type="video/mp4" />
-                              Your browser does not support the video tag.
-                            </video>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Action buttons */}
-                      <div className="flex gap-4 mt-8">
-                        {project.url && (
-                          <button
-                            onClick={() => window.open(project.url, '_blank')}
-                            className="flex-1 bg-gradient-to-r from-[#cb4242] to-[#a53333] hover:from-[#a53333] hover:to-[#7d2525] text-white font-semibold py-4 px-8 rounded-xl transition-all duration-300 libertinus-mono-bold shadow-lg hover:shadow-xl hover:shadow-[#cb4242]/20 transform hover:-translate-y-0.5"
-                          >
-                            Visit Live Project →
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <button
+                onClick={closeModal}
+                className="ml-2 p-2 border border-black hover:bg-black hover:text-white transition-colors duration-150"
+                aria-label="Close"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
+          </div>
 
-            {/* Dot indicators */}
-            <div className="flex justify-center gap-3 p-6 border-t border-[#cb4242]/30 bg-gradient-to-r from-[#f0edcf] to-[#ede8c3]">
-              {projects.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToProject(index)}
-                  className={`relative w-4 h-4 rounded-full transition-all duration-300 transform hover:scale-110 ${
-                    index === currentIndex 
-                      ? 'bg-[#cb4242] shadow-lg shadow-[#cb4242]/50' 
-                      : 'bg-[#d1d5db] hover:bg-[#9ca3af] border border-[#cb4242]/20'
-                  }`}
-                >
-                  {index === currentIndex && (
-                    <div className="absolute inset-0 bg-[#cb4242] rounded-full animate-pulse"></div>
-                  )}
-                </button>
+          {/* Slides container */}
+          <div className="flex-1 overflow-hidden">
+            <div
+              className="flex transition-transform duration-500 ease-out h-full"
+              style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+            >
+              {projects.map((project, index) => (
+                <div key={index} className="flex-shrink-0 w-full overflow-y-auto flex flex-col">
+                  {/* Image */}
+                  <div className="w-full h-64 border-b border-black overflow-hidden bg-white flex-shrink-0">
+                    <img
+                      src={project.imageUrl}
+                      alt={project.title}
+                      className={`w-full h-full ${
+                        project.title.includes('projectpartnership')
+                          ? 'object-contain'
+                          : 'object-cover'
+                      }`}
+                    />
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 space-y-5">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 pb-3 border-b border-black">
+                      <h3 className="text-2xl font-bold libertinus-mono-bold leading-tight">
+                        {project.title}
+                      </h3>
+                      {project.ghLink && (
+                        <button
+                          onClick={() => window.open(project.ghLink, '_blank')}
+                          className="flex-shrink-0 bg-white hover:bg-black hover:text-white text-black border border-black py-2 px-4 transition-colors duration-150 flex items-center justify-center gap-2 libertinus-mono-regular text-sm"
+                        >
+                          <span>View Code</span>
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+
+                    <p className="text-sm leading-7 libertinus-mono-regular text-black">
+                      {project.description}
+                    </p>
+
+                    {project.description2 && (
+                      <div className="space-y-2 pt-2 border-t border-black">
+                        <h4 className="text-xs uppercase tracking-wider libertinus-mono-bold text-black">
+                          Technical Details
+                        </h4>
+                        <p className="text-sm leading-7 libertinus-mono-regular text-black">
+                          {project.description2}
+                        </p>
+                      </div>
+                    )}
+
+                    {project.videoUrl && (
+                      <div className="space-y-2 pt-2 border-t border-black">
+                        <h4 className="text-xs uppercase tracking-wider libertinus-mono-bold text-black">
+                          Demo Video
+                        </h4>
+                        <video
+                          controls
+                          className="w-full border border-black"
+                          poster={project.imageUrl}
+                        >
+                          <source src={project.videoUrl} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                    )}
+
+                    {project.url && (
+                      <div className="pt-3">
+                        <button
+                          onClick={() => window.open(project.url, '_blank')}
+                          className="w-full bg-black hover:bg-white hover:text-black text-white border border-black py-3 px-6 transition-colors duration-150 libertinus-mono-bold"
+                        >
+                          Visit Live Project →
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
               ))}
             </div>
+          </div>
+
+          {/* Dot indicators */}
+          <div className="flex justify-center gap-2 p-4 border-t border-black bg-white">
+            {projects.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToProject(index)}
+                aria-label={`Go to project ${index + 1}`}
+                className={`w-2.5 h-2.5 border border-black transition-colors duration-150 ${
+                  index === currentIndex ? 'bg-black' : 'bg-white hover:bg-gray-300'
+                }`}
+              />
+            ))}
           </div>
         </div>
       )}
