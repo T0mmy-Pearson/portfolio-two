@@ -73,6 +73,17 @@ const TechStack = ({ onClose }: TechStackProps) => {
         { name: 'React Native', icon: 'https://cdn.simpleicons.org/react/61DAFB' },
         { name: 'Expo', icon: 'https://cdn.simpleicons.org/expo/000020' },
       ]
+    },
+    threeD: {
+      name: '3D & Graphics',
+      color: 'bg-[#049ef4]',
+      technologies: [
+        { name: 'Three.js', icon: 'https://cdn.simpleicons.org/threedotjs/000000' },
+        { name: 'React Three Fiber', icon: 'https://cdn.simpleicons.org/react/61DAFB' },
+        { name: 'WebGL', icon: 'https://cdn.simpleicons.org/webgl/990000' },
+        { name: '3D Modelling', icon: 'https://cdn.simpleicons.org/blender/E87D0D' },
+        { name: '3D Design', icon: 'https://cdn.simpleicons.org/autodesk/0696D7' },
+      ]
     }
   }
 

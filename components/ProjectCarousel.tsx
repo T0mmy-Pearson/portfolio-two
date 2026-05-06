@@ -4,6 +4,14 @@ import { useEffect, useState, useRef } from 'react'
 
 const projects = [
   {
+      title: "Floating Futures",
+      description: "An interactive offshore wind learning platform built over six months for Flotation Energy, aimed at UK secondary-school learners (14–19), classroom facilitators, and career changers exploring the sector. The platform pairs a real-time 3D game — a free-flying Wind Farm Explorer with structured lessons on wind & pressure, turbine anatomy, environmental impact assessments, the turbine-to-grid journey, and a careers tour — with a Skills Portal covering 200+ offshore wind roles, career pathways, critical occupations, and an interactive D3-driven training map of UK & Ireland providers. Lessons share a unified DiscoveryPanel chrome and reset cleanly between modes via a radial Mission Hub.",
+      description2: "Built with Next.js 14, React 18, and TypeScript. The 3D scene uses React Three Fiber, drei, and Three.js, with @react-three/rapier installed for upcoming physics work; users can swap turbine substructures (Semi-Sub, Spar, Tri-Floater) at runtime and the fleet dissolves and re-mounts. The training map is built on D3 v7 (geo, zoom, scale) with marker clustering and a live wind-vector overlay backed by WeatherLayers. UI uses Framer Motion and Tailwind CSS. I also handled the 3D design and modelling work in Blender for the turbines, substations, vessels, and wildlife survey assets. All free-text content is normalised to British English at render.",
+      imageUrl: "https://raw.githubusercontent.com/T0mmy-Pearson/portfolio-two/main/Public/windfarm.png",
+      ghLink: "",
+      url: "",
+    },
+  {
       title:"WIP - Artist's Website",
       description: "Built with Next.js, featuring a 3D interactive globe, in Three.js, modular navigation, poetry and visual art galleries, and journalism and sound links that open in scrollable modal popups. Responsive, modern, and designed for immersive multimedia storytelling and portfolio presentation.",
       imageUrl: "https://raw.githubusercontent.com/T0mmy-Pearson/portfolio-two/main/Public/tpers0n.png",
