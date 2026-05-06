@@ -97,40 +97,55 @@ const Hero = ({ activePanel, onActivate }: HeroProps) => {
           {/* Hero Content - top left, constrained to left half */}
           <div className="flex flex-col w-full md:w-1/2 md:pr-8">
             <h1 className="text-6xl md:text-8xl xl:text-9xl font-bold mb-8 libertinus-mono-regular opacity-0 animate-fade-in-up border-b-2 border-black pb-4" style={{animationDelay: '2s', animationFillMode: 'forwards'}}>Tom Pearson.</h1>
-            <div className="border-b border-black flex flex-row flex-wrap gap-x-8 md:gap-x-12 gap-y-2 pb-4 animate-fade-in-up opacity-0" style={{animationDelay: '3s', animationFillMode: 'forwards'}}>
-              <p
-                className={`text-2xl md:text-3xl xl:text-4xl text-gray-400 cursor-pointer hover:text-gray-700 hover:scale-105 transition-all duration-200 libertinus-mono-regular animate-pulse-shadow ${clickedLinks.fullStack ? 'line-through' : ''}`}
-                onClick={handleFullStackClick}
-              >
-                Full-Stack Developer.
-              </p>
-              <p
-                className={`text-2xl md:text-3xl xl:text-4xl text-gray-400 cursor-pointer hover:text-gray-700 hover:scale-105 transition-all duration-200 libertinus-mono-regular animate-pulse-shadow ${clickedLinks.artist ? 'line-through' : ''}`}
-                onClick={handleArtistClick}
-              >
-                Artist.
-              </p>
-              <p
-                className={`text-2xl md:text-3xl xl:text-4xl text-gray-400 cursor-pointer hover:text-gray-700 hover:scale-105 transition-all duration-200 libertinus-mono-regular animate-pulse-shadow ${clickedLinks.writer ? 'line-through' : ''}`}
-                onClick={handleWriterClick}
-              >
-                Writer.
-              </p>
-            </div>
-            {/* Navigation Links */}
-            <ul className="flex flex-wrap gap-x-12 gap-y-2 font-medium mt-8 opacity-0 animate-fade-in-up" style={{animationDelay: '4.5s', animationFillMode: 'forwards'}}>
-              <button
-                onClick={handleContactClick}
-                className={`text-xl md:text-2xl xl:text-3xl hover:text-gray-500 hover:scale-105 libertinus-mono-regular cursor-pointer transition-all duration-200 ${clickedLinks.contact ? 'line-through' : ''}`}
-              >
-                Contact.
-              </button>
-              <button
-                onClick={handleTechStackClick}
-                className={`text-xl md:text-2xl xl:text-3xl hover:text-gray-500 hover:scale-105 libertinus-mono-regular cursor-pointer transition-all duration-200 ${clickedLinks.techStack ? 'line-through' : ''}`}
-              >
-                Tech Stack.
-              </button>
+            <ul className="flex flex-col gap-y-3 md:gap-y-4 animate-fade-in-up opacity-0" style={{animationDelay: '3s', animationFillMode: 'forwards'}}>
+              {[
+                { key: 'fullStack' as const, label: 'Full-Stack Developer.', onClick: handleFullStackClick },
+                { key: 'artist' as const, label: 'Artist.', onClick: handleArtistClick },
+                { key: 'writer' as const, label: 'Writer.', onClick: handleWriterClick },
+                { key: 'contact' as const, label: 'Contact.', onClick: handleContactClick },
+                { key: 'techStack' as const, label: 'Tech Stack.', onClick: handleTechStackClick },
+              ].map(({ key, label, onClick }) => {
+                const checked = clickedLinks[key]
+                return (
+                  <li key={key}>
+                    <button
+                      onClick={onClick}
+                      className="group flex items-center gap-4 md:gap-6 text-left w-full cursor-pointer"
+                      aria-pressed={checked}
+                    >
+                      <span
+                        className={`flex-shrink-0 flex items-center justify-center border-2 border-black w-8 h-8 md:w-10 md:h-10 xl:w-12 xl:h-12 transition-colors duration-200 ${
+                          checked ? 'bg-black/5' : 'group-hover:bg-black/5'
+                        }`}
+                        aria-hidden="true"
+                      >
+                        <span
+                          className={`libertinus-mono-regular text-2xl md:text-3xl xl:text-4xl leading-none transition-all duration-300 ease-out ${
+                            checked ? 'scale-100 rotate-0 opacity-100' : 'scale-0 -rotate-45 opacity-0'
+                          }`}
+                        >
+                          ×
+                        </span>
+                      </span>
+                      <span
+                        className={`relative libertinus-mono-regular text-2xl md:text-3xl xl:text-4xl transition-all duration-200 ${
+                          checked
+                            ? 'text-gray-500'
+                            : 'text-gray-400 group-hover:text-gray-700 group-hover:translate-x-1'
+                        }`}
+                      >
+                        {label}
+                        <span
+                          className={`pointer-events-none absolute left-0 top-1/2 h-[2px] bg-current transition-[width] duration-500 ease-out ${
+                            checked ? 'w-full' : 'w-0'
+                          }`}
+                          aria-hidden="true"
+                        />
+                      </span>
+                    </button>
+                  </li>
+                )
+              })}
             </ul>
           </div>
         </section>

@@ -12,14 +12,14 @@ const projects = [
       url: "",
     },
   {
-      title:"WIP - Artist's Website",
+      title:"Artist's Website - T.Person",
       description: "Built with Next.js, featuring a 3D interactive globe, in Three.js, modular navigation, poetry and visual art galleries, and journalism and sound links that open in scrollable modal popups. Responsive, modern, and designed for immersive multimedia storytelling and portfolio presentation.",
       imageUrl: "https://raw.githubusercontent.com/T0mmy-Pearson/portfolio-two/main/Public/tpers0n.png",
       ghLink: "https://github.com/T0mmy-Pearson/artist-website",
       url: "https://tpers0n.com",
     },
  {
-      title:"WIP - projectpartnership",
+      title:"projectpartnership",
       description: "Bold, statement driven static site design for an energy cooperative based in Aberdeen. Built in React with CSS and Javascript. From development through research, branding and planning, all the way to final code and deployment. Currently working on integrating user feedback and optimising performance.",
       imageUrl: "https://raw.githubusercontent.com/T0mmy-Pearson/portfolio-two/main/Public/pp.png",
       ghLink: "https://github.com/T0mmy-Pearson/projectpartnership-final",
@@ -31,6 +31,13 @@ const projects = [
       imageUrl: "https://raw.githubusercontent.com/T0mmy-Pearson/portfolio-two/main/Public/logo-jj.svg",
       ghLink: "https://github.com/T0mmy-Pearson/reactjs-job-application-journal",
       url: "https://jobjournal.netlify.app/"
+    },
+    {
+      title: "Artist's Website - Sama Hunt",
+      description: "Squarespace design for artists' website, design to lead on clear, bold line drawings.",
+      imageUrl: "https://raw.githubusercontent.com/T0mmy-Pearson/portfolio-two/main/Public/SH-Website.png",
+      ghLink: "",
+      url: "https://www.samhuntart.com/"
     },
      {
       title: "CapCheck",
@@ -80,6 +87,7 @@ interface ProjectCarouselProps {
 const ProjectCarousel = ({ isTriggered = false, onTrigger, isMobileSliding = false }: ProjectCarouselProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [view, setView] = useState<'grid' | 'detail'>('grid')
   const [touchStart, setTouchStart] = useState(0)
   const [touchEnd, setTouchEnd] = useState(0)
   const carouselRef = useRef<HTMLDivElement>(null)
@@ -88,18 +96,30 @@ const ProjectCarousel = ({ isTriggered = false, onTrigger, isMobileSliding = fal
   useEffect(() => {
     if (isTriggered) {
       setIsModalOpen(true)
+      setView('grid')
     }
   }, [isTriggered])
 
   const openModal = () => {
     setIsModalOpen(true)
     setCurrentIndex(0)
+    setView('grid')
   }
 
   const closeModal = () => {
     setIsModalOpen(false)
     setCurrentIndex(0)
+    setView('grid')
     if (onTrigger) onTrigger()
+  }
+
+  const openDetail = (index: number) => {
+    setCurrentIndex(index)
+    setView('detail')
+  }
+
+  const backToGrid = () => {
+    setView('grid')
   }
 
   const nextProject = () => {
@@ -114,18 +134,21 @@ const ProjectCarousel = ({ isTriggered = false, onTrigger, isMobileSliding = fal
     setCurrentIndex(index)
   }
 
-  // Touch handlers for swipe functionality
+  // Touch handlers for swipe functionality (detail view only)
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (view !== 'detail') return
     setTouchStart(e.targetTouches[0].clientX)
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
+    if (view !== 'detail') return
     setTouchEnd(e.targetTouches[0].clientX)
   }
 
   const handleTouchEnd = () => {
+    if (view !== 'detail') return
     if (!touchStart || !touchEnd) return
-    
+
     const distance = touchStart - touchEnd
     const isLeftSwipe = distance > 50
     const isRightSwipe = distance < -50
@@ -142,19 +165,23 @@ const ProjectCarousel = ({ isTriggered = false, onTrigger, isMobileSliding = fal
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isModalOpen) return
-      
+
       if (e.key === 'Escape') {
-        closeModal()
-      } else if (e.key === 'ArrowLeft') {
+        if (view === 'detail') {
+          backToGrid()
+        } else {
+          closeModal()
+        }
+      } else if (view === 'detail' && e.key === 'ArrowLeft') {
         prevProject()
-      } else if (e.key === 'ArrowRight') {
+      } else if (view === 'detail' && e.key === 'ArrowRight') {
         nextProject()
       }
     }
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isModalOpen])
+  }, [isModalOpen, view])
 
   const currentProject = projects[currentIndex]
 
@@ -173,34 +200,49 @@ const ProjectCarousel = ({ isTriggered = false, onTrigger, isMobileSliding = fal
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-black bg-white">
             <div className="flex items-baseline gap-4">
+              {view === 'detail' && (
+                <button
+                  onClick={backToGrid}
+                  className="p-2 border border-black hover:bg-black hover:text-white transition-colors duration-150"
+                  aria-label="Back to all projects"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+              )}
               <h2 className="text-2xl font-bold libertinus-mono-bold">Projects</h2>
               <div className="text-sm text-gray-600 libertinus-mono-regular">
-                {currentIndex + 1} / {projects.length}
+                {view === 'detail' ? `${currentIndex + 1} / ${projects.length}` : `${projects.length} total`}
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <button
-                onClick={prevProject}
-                className="p-2 border border-black hover:bg-black hover:text-white transition-colors duration-150 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-black"
-                disabled={currentIndex === 0}
-                aria-label="Previous project"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
+              {view === 'detail' && (
+                <>
+                  <button
+                    onClick={prevProject}
+                    className="p-2 border border-black hover:bg-black hover:text-white transition-colors duration-150 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-black"
+                    disabled={currentIndex === 0}
+                    aria-label="Previous project"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                  </button>
 
-              <button
-                onClick={nextProject}
-                className="p-2 border border-black hover:bg-black hover:text-white transition-colors duration-150 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-black"
-                disabled={currentIndex === projects.length - 1}
-                aria-label="Next project"
-              >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
+                  <button
+                    onClick={nextProject}
+                    className="p-2 border border-black hover:bg-black hover:text-white transition-colors duration-150 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-black"
+                    disabled={currentIndex === projects.length - 1}
+                    aria-label="Next project"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </>
+              )}
 
               <button
                 onClick={closeModal}
@@ -214,7 +256,40 @@ const ProjectCarousel = ({ isTriggered = false, onTrigger, isMobileSliding = fal
             </div>
           </div>
 
+          {/* Grid view */}
+          {view === 'grid' && (
+            <div className="flex-1 overflow-y-auto p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {projects.map((project, index) => (
+                  <button
+                    key={index}
+                    onClick={() => openDetail(index)}
+                    className="group flex flex-col border border-black bg-white hover:bg-black/5 transition-colors duration-150 text-left overflow-hidden"
+                  >
+                    <div className="w-full h-40 border-b border-black overflow-hidden bg-white flex-shrink-0">
+                      <img
+                        src={project.imageUrl}
+                        alt={project.title}
+                        className={`w-full h-full transition-transform duration-300 group-hover:scale-105 ${
+                          project.title.includes('projectpartnership')
+                            ? 'object-contain'
+                            : 'object-cover'
+                        }`}
+                      />
+                    </div>
+                    <div className="p-4">
+                      <h3 className="text-base libertinus-mono-bold leading-tight">
+                        {project.title}
+                      </h3>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Slides container */}
+          {view === 'detail' && (
           <div className="flex-1 overflow-hidden">
             <div
               className="flex transition-transform duration-500 ease-out h-full"
@@ -300,20 +375,23 @@ const ProjectCarousel = ({ isTriggered = false, onTrigger, isMobileSliding = fal
               ))}
             </div>
           </div>
+          )}
 
           {/* Dot indicators */}
-          <div className="flex justify-center gap-2 p-4 border-t border-black bg-white">
-            {projects.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => goToProject(index)}
-                aria-label={`Go to project ${index + 1}`}
-                className={`w-2.5 h-2.5 border border-black transition-colors duration-150 ${
-                  index === currentIndex ? 'bg-black' : 'bg-white hover:bg-gray-300'
-                }`}
-              />
-            ))}
-          </div>
+          {view === 'detail' && (
+            <div className="flex justify-center gap-2 p-4 border-t border-black bg-white">
+              {projects.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goToProject(index)}
+                  aria-label={`Go to project ${index + 1}`}
+                  className={`w-2.5 h-2.5 border border-black transition-colors duration-150 ${
+                    index === currentIndex ? 'bg-black' : 'bg-white hover:bg-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
     </>
